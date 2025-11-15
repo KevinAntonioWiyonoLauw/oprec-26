@@ -34,12 +34,14 @@ async function handleWawancaraSelection(
       Wawancara.findById(wawancaraId),
       User.findById(userId)
         .populate<{ prioritasHima: IDivisi; prioritasOti: IDivisi }>(queryFields)
-        .populate<{ tanggalPilihanOti: IWawancara; tanggalPilihanHima: IWawancara }>(
-          `${tanggalFields}.tanggalId`
-        )
-        .populate<{ tanggalPilihanOti: IWawancara; tanggalPilihanHima: IWawancara }>(
-          `${tanggalConflict}.tanggalId`
-        ),
+        .populate<{
+          tanggalPilihanOti: { tanggalId: IWawancara; jam?: Date };
+          tanggalPilihanHima: { tanggalId: IWawancara; jam?: Date };
+        }>(`${tanggalFields}.tanggalId`)
+        .populate<{
+          tanggalPilihanOti: { tanggalId: IWawancara; jam?: Date };
+          tanggalPilihanHima: { tanggalId: IWawancara; jam?: Date };
+        }>(`${tanggalConflict}.tanggalId`),
     ]);
 
     if (!wawancara) {
@@ -51,26 +53,36 @@ async function handleWawancaraSelection(
       res.status(400).json({ message: `User atau divisi pilihan tidak ditemukan` });
       return;
     }
+    
+    const conflictWrapper = user[tanggalConflict] as
+      | { tanggalId?: IWawancara; jam?: Date }
+      | undefined;
+
+    const conflictTanggal = conflictWrapper?.tanggalId;
 
     const possibleConflict =
-      (user[tanggalConflict].tanggalId as unknown as IWawancara)?.sesi.filter((sesi) =>
-        sesi.dipilihOleh.includes(userId)
+      conflictTanggal?.sesi.filter((sesi) =>
+        sesi.dipilihOleh.some((uid) => uid.toString() === userId.toString())
       ) || [];
 
-    if (possibleConflict.length > 0) {
+    if (possibleConflict.length > 0 && possibleConflict[0]) {
       const hasConflicts =
-        possibleConflict[0]?.jam.getTime() === jamWawancaraDate.getTime();
+        possibleConflict[0].jam.getTime() === jamWawancaraDate.getTime();
       if (hasConflicts) {
         res.status(400).json({
-          message: `Waktu wawancara yang dipilih bentrok dengan jadwal ${isHimakom ? 'OmahTI' : 'Himakom'}`,
+          message: `Waktu wawancara yang dipilih bentrok dengan jadwal ${
+            isHimakom ? "OmahTI" : "Himakom"
+          }`,
         });
         return;
       }
     }
 
     if (user[tanggalFields].tanggalId) {
-      res.status(400).json({ 
-        message: `Anda sudah memilih waktu wawancara untuk ${isHimakom ? 'Himakom' : 'OmahTI'}` 
+      res.status(400).json({
+        message: `Anda sudah memilih waktu wawancara untuk ${
+          isHimakom ? "Himakom" : "OmahTI"
+        }`,
       });
       return;
     }
@@ -86,10 +98,12 @@ async function handleWawancaraSelection(
 
     const slug = user[queryFields].slug;
 
-    console.log("Matching sesi slotDivisi FULL:", JSON.stringify(matchingSesi.slotDivisi, null, 2));
+    console.log(
+      "Matching sesi slotDivisi FULL:",
+      JSON.stringify(matchingSesi.slotDivisi, null, 2)
+    );
     console.log("User slug:", slug);
 
-    // Akses _doc untuk mendapatkan data asli dari subdocument
     const slotDivisiRaw: any = matchingSesi.slotDivisi;
     const slotDivisi = (slotDivisiRaw._doc || slotDivisiRaw) as DIVISISLOT;
 
@@ -97,36 +111,40 @@ async function handleWawancaraSelection(
     console.log("Keys in slotDivisi:", Object.keys(slotDivisi));
 
     if (!slotDivisi || !(slug in slotDivisi)) {
-      res.status(400).json({ message: `Divisi ${slug} tidak tersedia untuk sesi ini` });
+      res
+        .status(400)
+        .json({ message: `Divisi ${slug} tidak tersedia untuk sesi ini` });
       return;
     }
 
-    let current = slotDivisi[slug];
+    const current = slotDivisi[slug];
 
     console.log(`Slot info for ${slug}:`, current);
 
     if (!current || current.sisaSlot === undefined || current.sisaSlot <= 0) {
-      res.status(400).json({ message: `Slot untuk divisi ${slug} sudah penuh` });
+      res
+        .status(400)
+        .json({ message: `Slot untuk divisi ${slug} sudah penuh` });
       return;
     }
 
     current.sisaSlot -= 1;
     matchingSesi.dipilihOleh.push(userId);
-    user[tanggalFields].tanggalId = wawancara.id;
-    user[tanggalFields].jam = jamWawancaraDate;
+
+    (user[tanggalFields] as any).tanggalId = wawancara.id;
+    (user[tanggalFields] as any).jam = jamWawancaraDate;
 
     await Promise.all([wawancara.save(), user.save()]);
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: "Waktu wawancara berhasil dipilih",
       data: {
         jam: jamWawancaraDate,
         lokasi: current.lokasi,
-        sisaSlot: current.sisaSlot
-      }
+        sisaSlot: current.sisaSlot,
+      },
     });
     return;
-
   } catch (err) {
     console.error("ERROR handleWawancaraSelection", err);
     res.status(500).json({ message: "Internal server error" });
