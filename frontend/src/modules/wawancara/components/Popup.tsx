@@ -88,19 +88,17 @@ export default function Popup({
       try {
         setLoading(true);
         
-        // Call Next.js API route (bukan langsung ke backend)
-        const response = await fetch(
-          `/api/wawancara/${hima}/${selectedSlot.id}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              jamWawancara: selectedSlot.sesi,
-            }),
-          }
-        );
+        const wawancaraType = selectedSlot.himakom ? "hima" : "oti";
+        
+        const response = await fetch(`/api/wawancara/${wawancaraType}/${selectedSlot.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jamWawancara: selectedSlot.sesi.toISOString(),
+        }),
+      });
         
         const responseJSON = await response.json();
         

@@ -1,23 +1,37 @@
-// next and react modules
-
 // fetch
 interface ScheduleSlot {
-  id: string; // ID of the tanggal item
-  sesi: Date; // Date object of the session's jam time
+  id: string;
+  sesi: Date;
   himakom: boolean;
   sessionId: string;
 }
 
-type DivisionType = 'backend' | 'frontend' | 'uiux' | 'dsai' | 'cp' | 'mobapps' | 'gamedev' | 'cysec' | 'ipc' | 'media' | 'pr' | 'hr' | 'snf' | 'secretary' | 'skilldev' | 'treasurer';
+type DivisionType =
+  | "backend"
+  | "frontend"
+  | "uiux"
+  | "dsai"
+  | "cp"
+  | "mobapps"
+  | "gamedev"
+  | "cysec"
+  | "ipc"
+  | "media"
+  | "pr"
+  | "hr"
+  | "snf"
+  | "secretary"
+  | "skilldev"
+  | "treasurer";
 
 interface JadwalWawancaraProps {
   variant: "himakom" | "omahti";
-  disabled?: boolean;
-  slugWawancara: string;
-  pilihanDivisi: any;
+  disabled?: boolean; // true kalau user SUDAH memilih jadwal
+  slugWawancara: string; // slug divisi: "frontend", "backend", dll
+  pilihanDivisi: boolean; // true kalau user SUDAH memilih divisi
   wawancara: {
     himakom: boolean;
-    _id: string; // ID for the tanggal item
+    _id: string;
     tanggal: Date;
     sesi: {
       jam: Date;
@@ -38,14 +52,19 @@ interface JadwalWawancaraProps {
         secretary: { sisaSlot: number; lokasi: string };
         skilldev: { sisaSlot: number; lokasi: string };
         treasurer: { sisaSlot: number; lokasi: string };
-        hr: { sisaSlot: number; lokasi: string; };
+        hr: { sisaSlot: number; lokasi: string };
         _id: string;
       };
       _id: string;
     }[];
   }[];
   selectedSlot: ScheduleSlot | null;
-  onSlotSelect: (id: string, sesi: Date, himakom: boolean, sessionId: string) => void;
+  onSlotSelect: (
+    id: string,
+    sesi: Date,
+    himakom: boolean,
+    sessionId: string,
+  ) => void;
 }
 
 const JadwalWawancara: React.FC<JadwalWawancaraProps> = ({
@@ -57,13 +76,13 @@ const JadwalWawancara: React.FC<JadwalWawancaraProps> = ({
   selectedSlot,
   onSlotSelect,
 }) => {
+  const isGlobalDisabled = disabled || !pilihanDivisi;
 
   return (
     <div className="relative h-auto w-full rounded-md bg-custom-silver p-4">
       <div className="grid grid-cols-1 gap-4 overflow-x-auto xxs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {wawancara.map((item) => {
           const tanggalDate = new Date(item.tanggal);
-
           if (isNaN(tanggalDate.getTime())) {
             console.error("Invalid date:", item.tanggal);
             return null;
@@ -71,24 +90,35 @@ const JadwalWawancara: React.FC<JadwalWawancaraProps> = ({
 
           const day = tanggalDate.toLocaleDateString("id-ID", {
             weekday: "long",
+            timeZone: "Asia/Jakarta"
           });
           const date = tanggalDate.toLocaleDateString("id-ID", {
             day: "numeric",
             month: "short",
+            timeZone: "Asia/Jakarta"
           });
 
           return (
-            <div key={item._id} className={`${disabled && 'opacity-80'}`}>
+            <div key={item._id} className={disabled ? "opacity-80" : ""}>
               <h3
-                className={`mb-2 text-center text-base font-semibold ${variant === "himakom" ? "text-custom-blue" : "text-custom-orange"}`}
+                className={`mb-2 text-center text-base font-semibold ${
+                  variant === "himakom"
+                    ? "text-custom-blue"
+                    : "text-custom-orange"
+                }`}
               >
                 {day}
               </h3>
               <h3
-                className={`mb-2 text-center text-xl font-semibold ${variant === "himakom" ? "text-custom-blue" : "text-custom-orange"}`}
+                className={`mb-2 text-center text-xl font-semibold ${
+                  variant === "himakom"
+                    ? "text-custom-blue"
+                    : "text-custom-orange"
+                }`}
               >
                 {date}
               </h3>
+
               {item.sesi.map((session) => {
                 const jamDate = new Date(session.jam);
                 if (isNaN(jamDate.getTime())) {
@@ -99,65 +129,71 @@ const JadwalWawancara: React.FC<JadwalWawancaraProps> = ({
                 const timeString = jamDate.toLocaleTimeString("id-ID", {
                   hour: "2-digit",
                   minute: "2-digit",
+                  timeZone: "Asia/Jakarta",
+                  hour12: false
                 });
+
+                const slotInfo =
+                  slugWawancara
+                    ? session.slotDivisi[slugWawancara as DivisionType]
+                    : undefined;
+
+                const hasSlot =
+                  !slugWawancara
+                    ? false
+                    : slotInfo === undefined
+                      ? true
+                      : slotInfo.sisaSlot > 0;
+
+                const isSelected =
+                  selectedSlot?.sessionId === session._id &&
+                  selectedSlot?.sesi.getTime() === jamDate.getTime();
+
+                const buttonDisabled = isGlobalDisabled || !hasSlot;
 
                 return (
                   <div key={session._id}>
-                    {session?.slotDivisi[slugWawancara as DivisionType]?.sisaSlot > 0 ? (
-                      <button
-                        key={session._id}
-                        onClick={() =>
-                          onSlotSelect(item._id, jamDate, item.himakom, session._id)
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!buttonDisabled) {
+                          onSlotSelect(
+                            item._id,
+                            jamDate,
+                            item.himakom,
+                            session._id,
+                          );
                         }
-                        className={`mb-2 w-full rounded py-2 ${
-                          selectedSlot?.sessionId === session._id &&
-                          selectedSlot?.sesi.getTime() === jamDate.getTime()
+                      }}
+                      disabled={buttonDisabled}
+                      className={`mb-2 w-full rounded py-2 transition-colors
+                        ${
+                          isSelected
                             ? variant === "himakom"
                               ? "bg-custom-blue text-custom-silver"
-                              : `bg-custom-orange text-custom-silver hover:bg-custom-orange/80 ${
-                                  disabled ? "opacity-80" : "hover:bg-custom-orange"
-                                }`
-                            : "bg-custom-gray-light text-custom-black transition-colors hover:bg-custom-gray-light/80"
-                        } ${disabled ? "opacity-60 cursor-not-allowed bg-gray-400" : ""}`}
-                        disabled={disabled}
-                      >
-                        {timeString}
-                      </button>
-                    ) : (
-                      <button
-                        key={session._id}
-                        onClick={() =>
-                          onSlotSelect(item._id, jamDate, item.himakom, session._id)
-                        }
-                        disabled={true}
-                        className={`mb-2 w-full rounded py-2 ${
-                          selectedSlot?.sessionId === session._id &&
-                          selectedSlot?.sesi.getTime() === jamDate.getTime()
-                            ? variant === "himakom"
-                              ? "bg-custom-blue text-custom-silver opacity-60 cursor-not-allowed"
-                              : "bg-custom-orange text-custom-silver opacity-60 cursor-not-allowed"
-                            : "bg-custom-red text-custom-black opacity-60 cursor-not-allowed"
+                              : "bg-custom-orange text-custom-silver"
+                            : hasSlot
+                              ? "bg-custom-gray-light text-custom-black hover:bg-custom-gray-light/80"
+                              : "bg-custom-red text-custom-black opacity-60"
+                        } ${
+                          buttonDisabled
+                            ? "cursor-not-allowed opacity-60"
+                            : ""
                         }`}
-                      >
-                        {timeString}
-                      </button>
-                    )}
+                    >
+                      {timeString}
+                    </button>
                   </div>
                 );
-                
-                
               })}
             </div>
           );
         })}
       </div>
 
-      {/* overlay if user hasn't picked a division */}
       {!pilihanDivisi && (
-        <div className="absolute inset-0 grid place-items-center bg-custom-black/80 p-4 backdrop-blur-sm transition-all">
-          <h1
-            className={`text-center transition-opacity duration-300 text-custom-silver`}
-          >
+        <div className="absolute inset-0 grid place-items-center rounded-md bg-custom-black/80 p-4 backdrop-blur-sm transition-all">
+          <h1 className="text-center text-custom-silver">
             Isi divisi pilihanmu sebelum memilih jadwal wawancara.
           </h1>
         </div>

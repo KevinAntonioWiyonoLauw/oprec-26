@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
-// Define public routes that don't require authentication
 const PUBLIC_ROUTES = [
   "/himakom",
   "/omahti",
@@ -39,40 +38,32 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith(route),
   );
   const isAdminRoute = ADMIN_ROUTES.some((route) => pathname.startsWith(route));
-  // always allow access to root route
+
+  // Always allow access to root route
   if (pathname === "/") {
-    // If there's an access token, validate it
     if (accessToken) {
-      const validationResponse = await validateToken(
-        PUBLIC_API_URL,
-        accessToken,
-      );
+      const validationResponse = await validateToken(PUBLIC_API_URL, accessToken);
+      
       if (validationResponse.ok) {
-        const { user } = await validationResponse.json();
-        if(user.isAdmin){
+        const { user } = await validationResponse.clone().json(); // ✅ clone dulu
+        
+        if (user.isAdmin) {
           return NextResponse.redirect(new URL("/admin", request.url));
         }
+        
         const nextResponse = NextResponse.redirect(new URL("/divisi", request.url));
-        // Attach user data to request headers
         nextResponse.headers.set("x-user-id", user.userId);
         nextResponse.headers.set("x-user-NIM", user.NIM);
         nextResponse.headers.set("x-user-username", user.username || "");
-        nextResponse.headers.set("x-user-isAdmin", user.isAdmin || false);
-        nextResponse.headers.set(
-          "x-user-enrolledSlugHima",
-          user.enrolledSlugHima || "",
-        );
-        nextResponse.headers.set(
-          "x-user-enrolledSlugOti",
-          user.enrolledSlugOti || "",
-        );
+        nextResponse.headers.set("x-user-isAdmin", String(user.isAdmin || false));
+        nextResponse.headers.set("x-user-enrolledSlugHima", user.enrolledSlugHima || "");
+        nextResponse.headers.set("x-user-enrolledSlugOti", user.enrolledSlugOti || "");
         nextResponse.headers.set("x-url", pathname);
         return nextResponse;
+        
       } else if (validationResponse.status === 401 && refreshToken) {
-        const refreshResponse = await refreshTokenValidation(
-          PUBLIC_API_URL,
-          refreshToken,
-        );
+        const refreshResponse = await refreshTokenValidation(PUBLIC_API_URL, refreshToken);
+        
         if (refreshResponse.ok) {
           const response = NextResponse.redirect(new URL("/divisi", request.url));
           const setCookieHeaders = refreshResponse.headers.getSetCookie();
@@ -83,48 +74,40 @@ export async function middleware(request: NextRequest) {
           }
           return response;
         }
-        if (!refreshResponse.ok) {
-          const response = NextResponse.redirect(
-            new URL("/", request.url),
-          );
-          // Delete accessToken and refreshToken cookies
-          response.cookies.delete("refreshToken");
-          response.cookies.delete("accessToken");
-          return response;
-        }
+        
+        const response = NextResponse.redirect(new URL("/", request.url));
+        response.cookies.delete("refreshToken");
+        response.cookies.delete("accessToken");
+        return response;
       }
     }
     return NextResponse.next();
   }
 
-  // Handle other public routes
+  // Handle public routes with token
   if (isPublicRoute && accessToken) {
     const validationResponse = await validateToken(PUBLIC_API_URL, accessToken);
+    
     if (validationResponse.ok) {
-      const { user } = await validationResponse.json();
+      const { user } = await validationResponse.clone().json(); // ✅ clone
       
-      // Handle admin users
       if (user.isAdmin) {
         return NextResponse.redirect(new URL("/admin", request.url));
       }
       
-      // Redirect non-admin users to /divisi
       return NextResponse.redirect(new URL("/divisi", request.url));
+      
     } else if (validationResponse.status === 401 && refreshToken) {
-      const refreshResponse = await refreshTokenValidation(
-        PUBLIC_API_URL,
-        refreshToken,
-      );
+      const refreshResponse = await refreshTokenValidation(PUBLIC_API_URL, refreshToken);
+      
       if (refreshResponse.ok) {
-        const { user } = await refreshResponse.json();
-        
-        // Get new tokens from refresh response
+        const { user } = await refreshResponse.clone().json(); // ✅ clone
         const setCookieHeaders = refreshResponse.headers.getSetCookie();
+        
         const response = user.isAdmin 
           ? NextResponse.redirect(new URL("/admin", request.url))
           : NextResponse.redirect(new URL("/divisi", request.url));
         
-        // Set cookies properly
         if (setCookieHeaders && setCookieHeaders.length > 0) {
           setCookieHeaders.forEach(cookie => {
             response.headers.append("set-cookie", cookie);
@@ -133,52 +116,47 @@ export async function middleware(request: NextRequest) {
         
         return response;
       }
-      if(!refreshResponse.ok) {
-        const response = NextResponse.next();
-        // Delete accessToken and refreshToken cookies
-        response.cookies.delete("refreshToken");
-        response.cookies.delete("accessToken");
-        return response;
-      }
+      
+      const response = NextResponse.next();
+      response.cookies.delete("refreshToken");
+      response.cookies.delete("accessToken");
+      return response;
     }
-    // If validation fails, proceed to login
+    
     const response = NextResponse.next();
     response.cookies.delete("refreshToken");
     response.cookies.delete("accessToken");
     return response;
   }
+
+  // Handle admin routes
   if (isAdminRoute) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
     const validationResponse = await validateToken(PUBLIC_API_URL, accessToken);
+    
     if (validationResponse.ok) {
-      const { user } = await validationResponse.json();
+      const { user } = await validationResponse.clone().json(); // ✅ clone
+      
       if (!user.isAdmin) {
         return NextResponse.redirect(new URL("/divisi", request.url));
       }
+      
       const nextResponse = NextResponse.next();
-      // Attach user data to request headers
       nextResponse.headers.set("x-user-id", user.userId);
       nextResponse.headers.set("x-user-NIM", user.NIM);
       nextResponse.headers.set("x-user-username", user.username || "");
-      nextResponse.headers.set("x-user-isAdmin", user.isAdmin || false);
-      nextResponse.headers.set(
-        "x-user-enrolledSlugHima",
-        user.enrolledSlugHima || "",
-      );
-      nextResponse.headers.set(
-        "x-user-enrolledSlugOti",
-        user.enrolledSlugOti || "",
-      );
+      nextResponse.headers.set("x-user-isAdmin", String(user.isAdmin || false));
+      nextResponse.headers.set("x-user-enrolledSlugHima", user.enrolledSlugHima || "");
+      nextResponse.headers.set("x-user-enrolledSlugOti", user.enrolledSlugOti || "");
       nextResponse.headers.set("x-url", pathname);
       return nextResponse;
+      
     } else if (validationResponse.status === 401 && refreshToken) {
-      const refreshResponse = await refreshTokenValidation(
-        PUBLIC_API_URL,
-        refreshToken,
-      );
+      const refreshResponse = await refreshTokenValidation(PUBLIC_API_URL, refreshToken);
+      
       if (refreshResponse.ok) {
         const response = NextResponse.redirect(request.url);
         const setCookieHeaders = refreshResponse.headers.getSetCookie();
@@ -189,16 +167,19 @@ export async function middleware(request: NextRequest) {
         }
         return response;
       }
+      
       const response = NextResponse.redirect(new URL("/", request.url));
       response.cookies.delete("refreshToken");
       response.cookies.delete("accessToken");
       return response;
     }
+    
     const response = NextResponse.redirect(new URL("/", request.url));
     response.cookies.delete("refreshToken");
     response.cookies.delete("accessToken");
     return response;
   }
+
   // Protect other routes
   if (!isPublicRoute && !accessToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
@@ -207,32 +188,27 @@ export async function middleware(request: NextRequest) {
   // Validate token for protected routes
   if (!isPublicRoute && accessToken) {
     const validationResponse = await validateToken(PUBLIC_API_URL, accessToken);
+    
     if (validationResponse.ok) {
-      const { user } = await validationResponse.json();
-      if(user.isAdmin){
+      const { user } = await validationResponse.clone().json(); // ✅ clone
+      
+      if (user.isAdmin) {
         return NextResponse.redirect(new URL("/admin", request.url));
       }
+      
       const nextResponse = NextResponse.next();
-      // Attach user data to request headers
       nextResponse.headers.set("x-user-id", user.userId);
       nextResponse.headers.set("x-user-NIM", user.NIM);
       nextResponse.headers.set("x-user-username", user.username || "");
-      nextResponse.headers.set("x-user-isAdmin", user.isAdmin || false);
-      nextResponse.headers.set(
-        "x-user-enrolledSlugHima",
-        user.enrolledSlugHima || "",
-      );
-      nextResponse.headers.set(
-        "x-user-enrolledSlugOti",
-        user.enrolledSlugOti || "",
-      );
+      nextResponse.headers.set("x-user-isAdmin", String(user.isAdmin || false));
+      nextResponse.headers.set("x-user-enrolledSlugHima", user.enrolledSlugHima || "");
+      nextResponse.headers.set("x-user-enrolledSlugOti", user.enrolledSlugOti || "");
       nextResponse.headers.set("x-url", pathname);
       return nextResponse;
+      
     } else if (validationResponse.status === 401 && refreshToken) {
-      const refreshResponse = await refreshTokenValidation(
-        PUBLIC_API_URL,
-        refreshToken,
-      );
+      const refreshResponse = await refreshTokenValidation(PUBLIC_API_URL, refreshToken);
+      
       if (refreshResponse.ok) {
         const response = NextResponse.redirect(request.url);
         const setCookieHeaders = refreshResponse.headers.getSetCookie();
@@ -243,16 +219,13 @@ export async function middleware(request: NextRequest) {
         }
         return response;
       }
-      if (!refreshResponse.ok) {
-        const response = NextResponse.redirect(
-          new URL("/", request.url),
-        );
-        response.cookies.delete("refreshToken");
-        response.cookies.delete("accessToken");
-        return response;
-      }
+      
+      const response = NextResponse.redirect(new URL("/", request.url));
+      response.cookies.delete("refreshToken");
+      response.cookies.delete("accessToken");
+      return response;
     }
-    // If both validation and refresh fail, redirect to login
+    
     const response = NextResponse.redirect(new URL("/", request.url));
     response.cookies.delete("refreshToken");
     response.cookies.delete("accessToken");
@@ -262,7 +235,6 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Configure which routes should be handled by this middleware
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
