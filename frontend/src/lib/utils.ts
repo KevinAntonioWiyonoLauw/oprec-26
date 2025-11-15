@@ -32,7 +32,7 @@ export const LINIMASA_DETAIL = [
 
   {
     title: "Pengumuman",
-    date: "23 Nov - 24 Nov",
+    date: "22 Dec",
     description: "Hasil Pengumuman OmahTI dan Himakom",
   },
 ];
