@@ -8,12 +8,14 @@ const WaktuPilihan = ({
   slugHima,
 }: any) => {
   const isEmpty = !filteredHima && !filteredOti;
+  
   const formatDate = (isoString: Date) => {
     const date = new Date(isoString);
     return date.toLocaleDateString("id-ID", {
       year: "numeric",
       month: "long",
       day: "2-digit",
+      timeZone: "Asia/Jakarta", 
     });
   };
 
@@ -22,6 +24,7 @@ const WaktuPilihan = ({
     return date.toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Jakarta", 
     });
   };
   

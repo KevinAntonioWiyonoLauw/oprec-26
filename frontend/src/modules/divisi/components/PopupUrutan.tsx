@@ -42,6 +42,8 @@ const PopupUrutan = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>("");
+  const [selectedDivisiName, setSelectedDivisiName] = useState("");
+  const [isHimakom, setIsHimakom] = useState(false);
 
   const handleButtonClick = (number: number) => {
     if (clickedButtons === number) {
@@ -51,49 +53,53 @@ const PopupUrutan = ({
     }
   };
 
-const getCookie = (name: string): string | null => {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(
-    new RegExp("(^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") + "=([^;]*)")
-  );
-  return match ? decodeURIComponent(match[2]) : null;
-};
+  const getCookie = (name: string): string | null => {
+    if (typeof document === "undefined") return null;
+    const match = document.cookie.match(
+      new RegExp("(^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") + "=([^;]*)")
+    );
+    return match ? decodeURIComponent(match[2]) : null;
+  };
 
-const handleSubmit = async () => {
-  if (clickedButtons !== null && !hasMax) {
-    try {
-      const res = await fetch(`/api/divisi/${params}/choose`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ urutanPrioritas: clickedButtons }),
-      });
+  const handleSubmit = async () => {
+    if (clickedButtons !== null && !hasMax) {
+      try {
+        const res = await fetch(`/api/divisi/${params}/choose`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ urutanPrioritas: clickedButtons }),
+        });
 
-      const responseJson = await res.json().catch(() => ({}));
+        const responseJson = await res.json().catch(() => ({}));
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          setErrorMessage(
-            "Sesi kamu sudah berakhir. Silakan login ulang dulu ya."
-          );
+        if (!res.ok) {
+          if (res.status === 401) {
+            setErrorMessage(
+              "Sesi kamu sudah berakhir. Silakan login ulang dulu ya."
+            );
+          } else {
+            setErrorMessage(responseJson.message || "Gagal memilih divisi");
+          }
+          setShowErrorModal(true);
         } else {
-          setErrorMessage(responseJson.message || "Gagal memilih divisi");
+          // Simpan data divisi dari response
+          setSelectedDivisiName(responseJson.divisi?.judul || params);
+          setIsHimakom(responseJson.divisi?.himakom || false);
+          
+          setShowSuccessModal(true);
         }
+      } catch {
         setShowErrorModal(true);
-      } else {
-        setShowSuccessModal(true);
+        setErrorMessage("Terjadi kesalahan saat memilih divisi");
       }
-    } catch {
-      setShowErrorModal(true);
-      setErrorMessage("Terjadi kesalahan saat memilih divisi");
     }
-  }
-};
+  };
 
   const handleClose = () => {
     setShowSuccessModal(false);
-    router.refresh(); 
+    router.refresh();
   };
 
   const handleErrorClose = () => {
@@ -185,8 +191,14 @@ const handleSubmit = async () => {
       </AlertDialog>
 
       {showSuccessModal && (
-        <PopupDivisiBerhasil open={showSuccessModal} onClose={handleClose} />
+        <PopupDivisiBerhasil 
+          open={showSuccessModal} 
+          onClose={handleClose}
+          divisiName={selectedDivisiName}
+          isHimakom={isHimakom}
+        />
       )}
+      
       {showErrorModal && (
         <ErrorPopup
           errorMessage={errorMessage || ""}
