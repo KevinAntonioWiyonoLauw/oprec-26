@@ -10,8 +10,13 @@ export default function DivisiPilihan({
 }: {
   pilihanDivisi: any;
 }) {
+  // Filter out invalid data
+  const validPilihanDivisi = (pilihanDivisi || []).filter(
+    (divisi: any) => divisi && divisi.divisiId && divisi.divisiId.judul
+  );
+
   // ini temporary, nanti ganti authentication
-  const hasChosen = pilihanDivisi.length > 0;
+  const hasChosen = validPilihanDivisi.length > 0;
 
   return (
     <>
@@ -52,7 +57,7 @@ export default function DivisiPilihan({
             },
           }}
         >
-          {pilihanDivisi.map((divisi: any) => (
+          {validPilihanDivisi.map((divisi: any) => (
             <SwiperSlide key={divisi.id}>
               <DivisiCard
                 id={divisi.urutanPrioritas}
