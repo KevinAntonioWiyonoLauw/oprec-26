@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Divisi from './models/divisiModels';
-// import Wawancara from './models/wawancaraModels'; // Disabled until interview schedule is determined
 
 dotenv.config();
 
@@ -22,7 +21,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/be.webp',
             filename: 'be.webp',
-            deskripsiProker: 'Pelatihan komprehensif tentang pengembangan backend, meliputi Node.js, Express, database management, API design, dan best practices dalam membangun server-side applications.'
+            deskripsiProker: 'Pelatihan divisi Backend'
           }
         ],
         deskripsi: 'Divisi Backend bertanggung jawab mengembangkan logika server, API, dan database. Mempelajari Node.js, Express, MongoDB, PostgreSQL, dan membangun sistem yang scalable dan secure.',
@@ -45,7 +44,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/fe.webp',
             filename: 'fe.webp',
-            deskripsiProker: 'Pelatihan mendalam tentang pengembangan frontend modern, meliputi React, Next.js, state management, responsive design, dan best practices dalam membangun user interface yang interaktif.'
+            deskripsiProker: 'Pelatihan divisi Frontend'
           }
         ],
         deskripsi: 'Divisi Frontend fokus pada pengembangan UI yang menarik dan responsif. Mempelajari React, Next.js, Vue.js, Tailwind CSS untuk membangun aplikasi web modern.',
@@ -68,7 +67,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/uiux.webp',
             filename: 'uiux.webp',
-            deskripsiProker: 'Pelatihan design thinking, wireframing, prototyping, dan user research. Belajar membuat interface yang intuitif dan user experience yang menyenangkan menggunakan Figma dan tools modern lainnya.'
+            deskripsiProker: 'Pelatihan divisi UI/UX'
           }
         ],
         deskripsi: 'Divisi UI/UX merancang pengalaman pengguna yang optimal dan interface yang menarik. Mempelajari design thinking, wireframing, prototyping dengan Figma dan Adobe XD.',
@@ -91,7 +90,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/dsai.webp',
             filename: 'dsai.webp',
-            deskripsiProker: 'Pelatihan komprehensif tentang data analysis, machine learning, dan AI. Belajar data preprocessing, exploratory data analysis, modeling, dan deployment menggunakan Python dan tools modern.'
+            deskripsiProker: 'Pelatihan divisi Data Science & AI'
           }
         ],
         deskripsi: 'Divisi Data Science & AI fokus pada pengolahan data, analisis, dan machine learning. Mempelajari Python, pandas, scikit-learn, TensorFlow untuk menyelesaikan permasalahan dengan pendekatan data-driven.',
@@ -114,7 +113,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/cp.webp',
             filename: 'cp.webp',
-            deskripsiProker: 'Pelatihan algoritma dan problem solving untuk kompetisi programming. Meliputi data structures, dynamic programming, graph algorithms, dan persiapan menghadapi kompetisi seperti ICPC, INC, dan Gemastik.'
+            deskripsiProker: 'Pelatihan divisi Competitive Programming'
           }
         ],
         deskripsi: 'Divisi Competitive Programming fokus pada problem solving dan algoritma. Persiapan untuk kompetisi seperti ICPC, INC, Gemastik dengan pembelajaran algoritma advanced.',
@@ -135,9 +134,24 @@ const seedDivisi = async () => {
         slug: 'mobapps',
         proker: [
           {
-            url: '/assets/proker/fe.webp',
-            filename: 'mobapps.webp',
-            deskripsiProker: 'Pelatihan pengembangan aplikasi mobile untuk Android dan iOS. Belajar Flutter, React Native, state management, API integration, dan best practices dalam membangun aplikasi mobile yang performant.'
+            url: '/assets/proker/mobapps0.webp',
+            filename: 'mobapps0.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          },
+          {
+            url: '/assets/proker/mobapps1.webp',
+            filename: 'mobapps1.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          },
+          {
+            url: '/assets/proker/mobapps2.webp',
+            filename: 'mobapps2.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          },
+          {
+            url: '/assets/proker/mobapps3.webp',
+            filename: 'mobapps3.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
           }
         ],
         deskripsi: 'Divisi Mobile Apps mengembangkan aplikasi mobile untuk Android dan iOS. Mempelajari Flutter, React Native, Kotlin/Swift untuk membangun aplikasi yang performant.',
@@ -160,7 +174,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/gamedev.webp',
             filename: 'gamedev.webp',
-            deskripsiProker: 'Pelatihan pembuatan game untuk berbagai platform. Meliputi Unity/Unreal Engine, game design, physics, animation, sound design, dan optimization untuk menghasilkan game yang engaging dan performant.'
+            deskripsiProker: 'Pelatihan divisi Game Development'
           }
         ],
         deskripsi: 'Divisi Game Development membuat game untuk PC, Mobile, dan Web. Mempelajari Unity/Unreal Engine, C#/C++, game design principles, dan optimization.',
@@ -183,7 +197,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/cysec.webp',
             filename: 'cysec.webp',
-            deskripsiProker: 'Pelatihan keamanan sistem dan ethical hacking. Meliputi penetration testing, vulnerability assessment, forensics, cryptography, dan penggunaan security tools untuk mengamankan sistem.'
+            deskripsiProker: 'Pelatihan divisi Cyber Security'
           }
         ],
         deskripsi: 'Divisi Cyber Security fokus pada keamanan sistem, penetration testing, dan forensics. Mempelajari ethical hacking, security tools (Kali Linux, Metasploit), dan cryptography.',
@@ -203,12 +217,12 @@ const seedDivisi = async () => {
         judulPanjang: 'Bendahara',
         logoDivisi: 'treasurer.png',
         slot: 3,
-        slug: 'sekbend',
+        slug: 'treasurer',
         proker: [
           {
-            url: '/assets/proker/hr.webp',
+            url: '/assets/proker/sekbend.webp',
             filename: 'sekbend.webp',
-            deskripsiProker: 'Pelatihan pengelolaan keuangan organisasi. Meliputi pencatatan transaksi, budgeting, financial planning, laporan keuangan, dan best practices dalam manajemen keuangan himpunan.'
+            deskripsiProker: 'Sekbend di openhouse'
           }
         ],
         deskripsi: 'Divisi Treasurer mengelola keuangan HIMAKOM secara menyeluruh. Membuat laporan keuangan, mengelola cash flow, budgeting, dan tracking keuangan organisasi dengan transparan.',
@@ -217,7 +231,7 @@ const seedDivisi = async () => {
         penugasan: {
           deskripsiPenugasan: 'Buat sistem pencatatan keuangan atau laporan keuangan untuk event lengkap dengan pemasukan, pengeluaran, dan analisis budget yang detail dan realistis.',
           toolsPenugasan: 'Microsoft Excel, Google Sheets, Notion',
-          linkPenugasan: 'https://drive.google.com/drive/folders/1HqUCb7OqFfcmWUKrgnApkYE-bSN2yxHA?ths=true',
+          linkPenugasan: 'https://drive.google.com/drive/folders/1HqUCb7OqFfcmWUKrgnApkYE-bSN2yxHA?usp=drive_link',
           deadline: new Date(2025, 10, 21, 12, 0),
         },
       },
@@ -226,12 +240,12 @@ const seedDivisi = async () => {
         judulPanjang: 'Sekretaris',
         logoDivisi: 'secretary.png',
         slot: 3,
-        slug: 'sekbend',
+        slug: 'secretary',
         proker: [
           {
-            url: '/assets/proker/hr.webp',
+            url: '/assets/proker/sekbend.webp',
             filename: 'sekbend.webp',
-            deskripsiProker: 'Pelatihan administrasi dan dokumentasi organisasi. Meliputi pembuatan notulensi, pengelolaan arsip, surat-menyurat resmi, dan sistem dokumentasi yang efektif untuk organisasi.'
+            deskripsiProker: 'Sekbend di openhouse'
           }
         ],
         deskripsi: 'Divisi Secretary mengelola administrasi dan dokumentasi HIMAKOM. Membuat notulensi rapat, mengelola arsip, dan mengatur surat-menyurat organisasi dengan sistematis.',
@@ -240,7 +254,7 @@ const seedDivisi = async () => {
         penugasan: {
           deskripsiPenugasan: 'Buat sistem dokumentasi atau notulensi rapat yang terstruktur. Atau buat proposal/surat resmi dengan format yang proper dan bahasa yang formal.',
           toolsPenugasan: 'Microsoft Word, Google Docs, Notion, Canva',
-          linkPenugasan: 'https://drive.google.com/drive/folders/1GCtX9LP50JaVH6JfKx8xauYHSy9MJHKD?ths=true',
+          linkPenugasan: 'https://drive.google.com/drive/folders/1GCtX9LP50JaVH6JfKx8xauYHSy9MJHKD?usp=drive_link',
           deadline: new Date(2025, 10, 21, 12, 0),
         },
       },
@@ -254,7 +268,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/hr.webp',
             filename: 'hr.webp',
-            deskripsiProker: 'Pelatihan pengembangan SDM organisasi. Meliputi recruitment strategies, training programs, team building activities, performance evaluation, dan employee engagement untuk organisasi.'
+            deskripsiProker: 'Pertemuan divisi Human Resources'
           }
         ],
         deskripsi: 'Divisi HR fokus pada pengembangan SDM HIMAKOM. Mengelola recruitment, training, team building, dan program pengembangan kompetensi anggota organisasi.',
@@ -277,7 +291,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/ipc.webp',
             filename: 'ipc.webp',
-            deskripsiProker: 'Pelatihan monitoring dan evaluasi kinerja organisasi. Meliputi audit internal, performance assessment, problem analysis, dan penyusunan rekomendasi perbaikan untuk HIMAKOM.'
+            deskripsiProker: 'Pertemuan divisi Internal Public Control'
           }
         ],
         deskripsi: 'Divisi IPC mengawasi dan mengevaluasi kinerja internal HIMAKOM. Melakukan monitoring, audit internal, dan memberikan rekomendasi perbaikan untuk organisasi.',
@@ -300,7 +314,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/snf.webp',
             filename: 'snf.webp',
-            deskripsiProker: 'Pelatihan mencari sponsor dan fundraising untuk event. Meliputi proposal writing, negotiation skills, partnership management, dan strategi kreatif dalam menggalang dana organisasi.'
+            deskripsiProker: 'Pertemuan divisi Sponsorship & Fundraising'
           }
         ],
         deskripsi: 'Divisi S&F mencari sponsor dan menggalang dana untuk kegiatan HIMAKOM. Membuat proposal sponsorship, negosiasi dengan partner, dan mengelola kemitraan strategis.',
@@ -323,7 +337,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/skilldev.webp',
             filename: 'skilldev.webp',
-            deskripsiProker: 'Pelatihan pengembangan kompetensi mahasiswa Ilkom. Meliputi workshop planning, curriculum design, training delivery, dan program pengembangan skill baik teknis maupun soft skills.'
+            deskripsiProker: 'Pertemuan divisi Skill Development'
           }
         ],
         deskripsi: 'Divisi Skilldev fokus pada pengembangan kompetensi mahasiswa Ilkom. Mengadakan workshop, bootcamp, dan program pelatihan di berbagai bidang teknologi dan soft skills.',
@@ -342,13 +356,7 @@ const seedDivisi = async () => {
         logoDivisi: 'media.png',
         slot: 5,
         slug: 'media',
-        proker: [
-          {
-            url: '/assets/proker/pr.webp',
-            filename: 'media.webp',
-            deskripsiProker: 'Pelatihan konten kreatif dan visual storytelling. Meliputi graphic design, photography, videography, video editing, dan social media content creation untuk dokumentasi dan publikasi.'
-          }
-        ],
+        proker: [],
         deskripsi: 'Divisi Media mengelola konten visual, photography, videography, dan desain grafis HIMAKOM. Membuat konten engaging untuk social media dan dokumentasi event.',
         dipilihOleh: [],
         himakom: true,
@@ -369,7 +377,7 @@ const seedDivisi = async () => {
           {
             url: '/assets/proker/pr.webp',
             filename: 'pr.webp',
-            deskripsiProker: 'Pelatihan komunikasi publik dan brand management. Meliputi press release writing, media relations, crisis management, event publicity, dan strategi membangun citra positif organisasi.'
+            deskripsiProker: 'Pertemuan divisi Public Relations'
           }
         ],
         deskripsi: 'Divisi PR mengelola hubungan dengan pihak eksternal dan komunikasi publik HIMAKOM. Membuat press release, mengelola media relations, dan membangun brand image organisasi.',
@@ -384,90 +392,6 @@ const seedDivisi = async () => {
       },
     ];
 
-    // ==================== WAWANCARA DATA (DISABLED - BELUM DITENTUKAN) ====================
-    /*
-    // Wawancara Data
-    const wawancaraData = [];
-    
-    const divisiSlotsHima = {
-      treasurer: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      secretary: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      hr: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      ipc: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      pr: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      skilldev: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      snf: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      media: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-    };
-
-    const divisiSlotsOti = {
-      frontend: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      backend: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      cysec: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      uiux: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      cp: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      mobapps: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      gamedev: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-      dsai: { sisaSlot: 1, lokasi: 'Ruang IUP' },
-    };
-
-    // HIMAKOM Interview: 23-24 November 2025
-    for (let day = 23; day <= 24; day++) {
-      const sesi = [];
-      const startHour = 18;
-      const startMinute = 20;
-      const intervalMinutes = 35;
-
-      for (let h = startHour, m = startMinute; h < 20 || (h === 20 && m <= 30); ) {
-        sesi.push({
-          jam: new Date(2025, 10, day, h, m),
-          dipilihOleh: [],
-          slotDivisi: JSON.parse(JSON.stringify(divisiSlotsHima)),
-        });
-
-        m += intervalMinutes;
-        if (m >= 60) {
-          h += 1;
-          m -= 60;
-        }
-      }
-
-      wawancaraData.push({
-        tanggal: new Date(2025, 10, day),
-        himakom: true,
-        sesi,
-      });
-    }
-
-    // OTI Interview: 25-28 November 2025
-    for (let day = 25; day <= 28; day++) {
-      const sesi = [];
-      const startHour = 18;
-      const startMinute = 20;
-      const intervalMinutes = 35;
-
-      for (let h = startHour, m = startMinute; h < 20 || (h === 20 && m <= 30); ) {
-        sesi.push({
-          jam: new Date(2025, 10, day, h, m),
-          dipilihOleh: [],
-          slotDivisi: JSON.parse(JSON.stringify(divisiSlotsOti)),
-        });
-
-        m += intervalMinutes;
-        if (m >= 60) {
-          h += 1;
-          m -= 60;
-        }
-      }
-
-      wawancaraData.push({
-        tanggal: new Date(2025, 10, day),
-        himakom: false,
-        sesi,
-      });
-    }
-    */
-
     // Insert divisi data
     console.log('Inserting divisi data...');
     for(const divisi of divisiData){
@@ -475,17 +399,6 @@ const seedDivisi = async () => {
       await divisiBaru.save();
     }
     console.log('✅ Divisi data successfully seeded!');
-    
-    // Insert wawancara data (DISABLED - BELUM DITENTUKAN)
-    /*
-    console.log('Inserting wawancara data...');
-    for(const wawancara of wawancaraData){
-      const wawancaraBaru = new Wawancara(wawancara);
-      await wawancaraBaru.save();
-    }
-    console.log('✅ Wawancara data successfully seeded!');
-    */
-    console.log('⚠️  Wawancara seeding disabled - jadwal belum ditentukan');
     
     // Disconnect from MongoDB
     await mongoose.disconnect();
