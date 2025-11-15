@@ -402,14 +402,15 @@ export const getUserDiterimaDimana = async (req: IGetRequestWithUser, res: Respo
         return;
     }
     const currentDate = new Date();
-    const releaseDate = new Date("2024-12-04T08:00:00.000Z");
+    const releaseDate = new Date("2025-12-22T03:00:00.000Z"); // 22 December 2025, 10:00 WIB (UTC+7)
     try {
         const user = await User.findById(req.user.userId).populate("diterimaDi");
         if(!user) {
             res.status(404).json({message: "User not found"});
             return;
         }
-        if((currentDate < releaseDate)) {
+        // Allow admin to access anytime
+        if((currentDate < releaseDate) && !user.isAdmin) {
             res.status(403).json({message: "Forbidden: Access Denied"});
             return;
         }
