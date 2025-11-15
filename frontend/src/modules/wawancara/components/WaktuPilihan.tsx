@@ -10,16 +10,19 @@ const WaktuPilihan = ({
   const isEmpty = !filteredHima && !filteredOti;
   const formatDate = (isoString: Date) => {
     const date = new Date(isoString);
-    // Adjust for GMT+7 by adding 7 hours
-    date.setHours(date.getHours() + 7);
-    return date.toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "2-digit" });
+    return date.toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    });
   };
-  
+
   const formatTime = (isoString: Date) => {
     const date = new Date(isoString);
-    // Adjust for GMT+7 by adding 7 hours
-    date.setHours(date.getHours() + 7);
-    return date.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
   
   return (

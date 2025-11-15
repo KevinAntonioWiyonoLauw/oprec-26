@@ -62,6 +62,7 @@ const DivisionTable = ({ allUsers, admin }: { allUsers: any; admin: any }) => {
                 <td className="space-y-1.5">
                   {user.divisiPilihan && user.divisiPilihan.length > 0 ? (
                     user.divisiPilihan
+                      .filter((divisi: any) => divisi && divisi.divisiId && divisi.divisiId.slug)
                       .slice()
                       .sort(
                         (a: any, b: any) =>
@@ -74,14 +75,14 @@ const DivisionTable = ({ allUsers, admin }: { allUsers: any; admin: any }) => {
                         >
                           <div
                             className={`mr-2 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border ${
-                              divisi.divisiId.himakom
+                              divisi.divisiId?.himakom
                                 ? "border-custom-lavender text-custom-lavender"
                                 : "border-custom-orange text-custom-orange"
                             } `}
                           >
                             {divisi.urutanPrioritas}
                           </div>
-                          {divisi.divisiId?.slug.toUpperCase()}
+                          {divisi.divisiId?.slug?.toUpperCase()}
                         </div>
                       ))
                   ) : (
@@ -108,7 +109,7 @@ const DivisionTable = ({ allUsers, admin }: { allUsers: any; admin: any }) => {
                 </td>
 
                 <td>
-                  {user.tugas.length > 0 ? (
+                  {user.tugas && user.tugas.length > 0 ? (
                     <Link
                       href={user.tugas[0].link}
                       target="_blank"
