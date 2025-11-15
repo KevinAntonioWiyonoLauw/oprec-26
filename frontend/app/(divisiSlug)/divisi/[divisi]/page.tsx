@@ -43,6 +43,10 @@ const Page = async ({ params }: DivisiPageProps) => {
     notFound();
   }
 
+  const safeProker = Array.isArray(divisiData.proker)
+    ? divisiData.proker.filter((p: any) => p != null)
+    : [];
+
   return (
     <>
       <section
@@ -73,7 +77,7 @@ const Page = async ({ params }: DivisiPageProps) => {
             <About text={divisiData.deskripsi} />
 
             {/* Proyek */}
-            <ProjectsSwiper divisiData={divisiData.proker} />
+            <ProjectsSwiper divisiData={safeProker} />
           </div>
           {/* right side 30% */}
           <Penugasan

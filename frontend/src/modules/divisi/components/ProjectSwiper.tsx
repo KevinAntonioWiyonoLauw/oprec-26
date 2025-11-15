@@ -35,8 +35,13 @@ interface ProjectsSwiperProps {
 }
 
 export default function ProjectsSwiper({ divisiData }: ProjectsSwiperProps) {
-  // If there's no divisiData or it's an empty array, return nothing
-  if (!divisiData || divisiData.length === 0) {
+  // Normalize & filter null/undefined
+  const safeData =
+    Array.isArray(divisiData) && divisiData.length > 0
+      ? divisiData.filter((item) => item != null)
+      : [];
+
+  if (safeData.length === 0) {
     return null;
   }
 
@@ -74,11 +79,14 @@ export default function ProjectsSwiper({ divisiData }: ProjectsSwiperProps) {
           }}
           className="relative w-full mySwiper cursor-grab active:cursor-grabbing"
         >
-          {divisiData.map((item: any) => (
-            <SwiperSlide key={item._id?.$oid || item._id}>
-              <ProjectCard divisiData={item} />
-            </SwiperSlide>
-          ))}
+          {safeData.map((item: any, idx: number) => {
+            const key = item?._id?.$oid || item?._id || idx;
+            return (
+              <SwiperSlide key={key}>
+                <ProjectCard divisiData={item} />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>
