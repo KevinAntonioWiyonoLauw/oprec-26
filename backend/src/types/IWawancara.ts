@@ -4,7 +4,7 @@ export interface IWawancara extends Document{
     tanggalId: mongoose.Types.ObjectId,
     tanggal: Date,
     himakom: boolean,
-    sesi: [ISesi]
+    sesi: ISesi[] 
 }
 
 export interface ISlotDivisiPerSesi extends Document{
@@ -25,9 +25,14 @@ export interface ISlotDivisiPerSesi extends Document{
     pr: IDivisiSlot,
     media: IDivisiSlot,
 }
+
 export interface ISesi extends Document{
     jam: Date,
     dipilihOleh: mongoose.Types.ObjectId[],
+    slotTotal: {
+        current: number,
+        max: number
+    },  
     slotDivisi: ISlotDivisiPerSesi
 }
 

@@ -1,85 +1,61 @@
-import mongoose, {Schema} from 'mongoose';
-import { ISesi, IWawancara, ISlotDivisiPerSesi } from '../types/IWawancara';
+import mongoose, { Schema } from "mongoose";
+import { IWawancara } from "../types/IWawancara";
 
-const slotDivisiPerSesiSchema: Schema<ISlotDivisiPerSesi> = new Schema({
-    backend: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    frontend: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    uiux: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    dsai: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    cp: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    mobapps: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    gamedev: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    cysec: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    hr: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    media: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    pr: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    ipc: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    snf: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    secretary: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    treasurer: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-    skilldev: {
-        sisaSlot: Number,
-        lokasi: String
-    },
-})
-const sesiSchema: Schema<ISesi> = new Schema({
-    jam: Date,
-    dipilihOleh: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    slotDivisi: slotDivisiPerSesiSchema
-})
-const wawancaraSchema: Schema<IWawancara> = new Schema({
-    tanggal: Date,
-    himakom: Boolean,
-    sesi: [sesiSchema]
-})
+const divisiSlotSchema = new Schema(
+  {
+    sisaSlot: { type: Number, required: true },
+    lokasi: { type: String, required: true },
+  },
+  { _id: false }
+);
 
-const Wawancara = mongoose.model<IWawancara>('Wawancara', wawancaraSchema);
+const slotDivisiPerSesiSchema = new Schema(
+  {
+    backend: divisiSlotSchema,
+    frontend: divisiSlotSchema,
+    uiux: divisiSlotSchema,
+    dsai: divisiSlotSchema,
+    cp: divisiSlotSchema,
+    mobapps: divisiSlotSchema,
+    gamedev: divisiSlotSchema,
+    cysec: divisiSlotSchema,
+    hr: divisiSlotSchema,
+    treasurer: divisiSlotSchema,
+    secretary: divisiSlotSchema,
+    ipc: divisiSlotSchema,
+    skilldev: divisiSlotSchema,
+    snf: divisiSlotSchema,
+    pr: divisiSlotSchema,
+    media: divisiSlotSchema,
+  },
+  { _id: false }
+);
+
+const sesiSchema = new Schema(
+  {
+    jam: { type: Date, required: true },
+    dipilihOleh: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    slotTotal: {
+      current: { type: Number, required: true, default: 0 },
+      max: { type: Number, required: true, default: 6 },
+    },
+    slotDivisi: {
+      type: slotDivisiPerSesiSchema,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+const wawancaraSchema = new Schema<IWawancara>(
+  {
+    tanggal: { type: Date, required: true },
+    himakom: { type: Boolean, required: true },
+    sesi: [sesiSchema],
+  },
+  { timestamps: true }
+);
+
+const Wawancara = mongoose.model<IWawancara>("Wawancara", wawancaraSchema);
+
 export default Wawancara;

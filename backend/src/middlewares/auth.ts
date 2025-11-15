@@ -10,9 +10,6 @@ export const authenticateToken = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    console.log("=== AUTH DEBUG ===");
-    console.log("All cookies:", req.cookies);
-    console.log("Raw cookie header:", req.headers.cookie);
 
     let accessToken =
       req.cookies?.accessToken || req.cookies?.["accessToken"];

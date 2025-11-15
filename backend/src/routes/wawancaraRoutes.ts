@@ -2,7 +2,8 @@ import { Router, type Router as ExpressRouter } from 'express';
 import {
     pilihWaktuWawancaraOti,
     pilihWaktuWawancaraHima,
-    getAllWawancara
+    getAllWawancara,
+    getUserWawancaraSelections
 } from '../controllers/wawancaraControllers';
 import { authenticateToken } from '../middlewares/auth';
 import { sudahMemilihOti, sudahMemilihHima } from '../middlewares/sudahMemilih';
@@ -14,4 +15,6 @@ router.post('/oti/:wawancaraId', authenticateToken, sudahMemilihOti, sudahMengum
 router.post('/hima/:wawancaraId', authenticateToken, sudahMemilihHima, sudahMengumpulkanHima, pilihWaktuWawancaraHima);
 
 router.get('/', getAllWawancara);
+router.get('/user-selections', authenticateToken, getUserWawancaraSelections);
+
 export default router;

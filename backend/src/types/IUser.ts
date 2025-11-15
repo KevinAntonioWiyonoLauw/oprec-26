@@ -31,4 +31,5 @@ export interface DivisiPilihan {
 
 export interface TanggalPilihan{
     tanggalId: mongoose.Types.ObjectId,
+    jam?: Date,
 }

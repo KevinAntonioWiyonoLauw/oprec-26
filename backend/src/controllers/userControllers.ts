@@ -425,3 +425,62 @@ export const getUserDiterimaDimana = async (req: IGetRequestWithUser, res: Respo
         return;
     }
 }
+
+export const getMe = async (req: IGetRequestWithUser, res: Response): Promise<void> => {
+    try {
+        if (!req.user) {
+            res.status(401).json({ message: "Unauthorized" });
+            return;
+        }
+
+        const userId = req.user.userId;
+        
+        const user = await User.findById(userId)
+            .populate({
+                path: "divisiPilihan.divisiId",
+                select: "judul slug himakom" 
+            })
+            .lean();
+
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        const userResponse = {
+            _id: user._id,
+            email: user.email,
+            username: user.username,
+            NIM: user.NIM,
+            isAdmin: user.isAdmin,
+            enrolledSlugOti: user.enrolledSlugOti,
+            enrolledSlugHima: user.enrolledSlugHima,
+            prioritasOti: user.prioritasOti,
+            prioritasHima: user.prioritasHima,
+            divisiPilihan: user.divisiPilihan?.map((dp: any) => ({
+                divisiId: {
+                    _id: dp.divisiId._id,
+                    judul: dp.divisiId.judul,
+                    slug: dp.divisiId.slug,
+                    himakom: dp.divisiId.himakom
+                },
+                urutanPrioritas: dp.urutanPrioritas,
+                _id: dp._id
+            })) || [],
+            tanggalPilihanOti: user.tanggalPilihanOti,
+            tanggalPilihanHima: user.tanggalPilihanHima,
+            __v: user.__v
+        };
+
+        res.status(200).json({
+            message: "User data retrieved successfully",
+            user: userResponse
+        });
+        return;
+
+    } catch (error) {
+        console.error("Error in getMe:", error);
+        res.status(500).json({ message: "Internal server error" });
+        return;
+    }
+};

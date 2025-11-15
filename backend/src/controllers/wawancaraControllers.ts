@@ -20,7 +20,6 @@ async function handleWawancaraSelection(
       return;
     }
 
-    const queryFields = isHimakom ? "prioritasHima" : "prioritasOti";
     const tanggalFields = isHimakom ? "tanggalPilihanHima" : "tanggalPilihanOti";
     const tanggalConflict = isHimakom ? "tanggalPilihanOti" : "tanggalPilihanHima";
 
@@ -33,7 +32,12 @@ async function handleWawancaraSelection(
     const [wawancara, user] = await Promise.all([
       Wawancara.findById(wawancaraId),
       User.findById(userId)
-        .populate<{ prioritasHima: IDivisi; prioritasOti: IDivisi }>(queryFields)
+        .populate<{ 
+          divisiPilihan: Array<{ 
+            divisiId: IDivisi; 
+            urutanPrioritas: number; 
+          }>
+        }>("divisiPilihan.divisiId")
         .populate<{
           tanggalPilihanOti: { tanggalId: IWawancara; jam?: Date };
           tanggalPilihanHima: { tanggalId: IWawancara; jam?: Date };
@@ -49,11 +53,22 @@ async function handleWawancaraSelection(
       return;
     }
 
-    if (!user || !user[queryFields]) {
-      res.status(400).json({ message: `User atau divisi pilihan tidak ditemukan` });
+    if (!user || !user.divisiPilihan || user.divisiPilihan.length === 0) {
+      res.status(400).json({ message: "User atau divisi pilihan tidak ditemukan" });
       return;
     }
-    
+
+    const userDivisions = user.divisiPilihan
+      .filter(dp => dp.divisiId.himakom === isHimakom)
+      .map(dp => dp.divisiId.slug);
+
+    if (userDivisions.length === 0) {
+      res.status(400).json({ 
+        message: `Kamu belum memilih divisi ${isHimakom ? 'Himakom' : 'OmahTI'}` 
+      });
+      return;
+    }
+
     const conflictWrapper = user[tanggalConflict] as
       | { tanggalId?: IWawancara; jam?: Date }
       | undefined;
@@ -69,10 +84,9 @@ async function handleWawancaraSelection(
       const hasConflicts =
         possibleConflict[0].jam.getTime() === jamWawancaraDate.getTime();
       if (hasConflicts) {
+        const conflictType = isHimakom ? "OmahTI" : "Himakom";
         res.status(400).json({
-          message: `Waktu wawancara yang dipilih bentrok dengan jadwal ${
-            isHimakom ? "OmahTI" : "Himakom"
-          }`,
+          message: `Kamu sudah memilih ${conflictType} di waktu yang sama (${jamWawancaraDate.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Jakarta" })})`
         });
         return;
       }
@@ -96,39 +110,73 @@ async function handleWawancaraSelection(
       return;
     }
 
-    const slug = user[queryFields].slug;
-
-    console.log(
-      "Matching sesi slotDivisi FULL:",
-      JSON.stringify(matchingSesi.slotDivisi, null, 2)
-    );
-    console.log("User slug:", slug);
+    if (matchingSesi.slotTotal.current >= matchingSesi.slotTotal.max) {
+      res.status(400).json({ 
+        message: "Sesi wawancara ini sudah penuh (maksimal 6 orang)" 
+      });
+      return;
+    }
 
     const slotDivisiRaw: any = matchingSesi.slotDivisi;
     const slotDivisi = (slotDivisiRaw._doc || slotDivisiRaw) as DIVISISLOT;
 
-    console.log("slotDivisi setelah cast:", slotDivisi);
-    console.log("Keys in slotDivisi:", Object.keys(slotDivisi));
-
-    if (!slotDivisi || !(slug in slotDivisi)) {
-      res
-        .status(400)
-        .json({ message: `Divisi ${slug} tidak tersedia untuk sesi ini` });
+    if (!slotDivisi) {
+      res.status(400).json({ 
+        message: "Data slot divisi tidak tersedia" 
+      });
       return;
     }
 
-    const current = slotDivisi[slug];
+    const unavailableDivisions: string[] = [];
+    const divisionsWithNoSlot: string[] = [];
 
-    console.log(`Slot info for ${slug}:`, current);
+    for (const divSlug of userDivisions) {
+      if (!(divSlug in slotDivisi)) {
+        unavailableDivisions.push(divSlug);
+        continue;
+      }
 
-    if (!current || current.sisaSlot === undefined || current.sisaSlot <= 0) {
-      res
-        .status(400)
-        .json({ message: `Slot untuk divisi ${slug} sudah penuh` });
+      const current = slotDivisi[divSlug];
+      if (!current || current.sisaSlot === undefined || current.sisaSlot <= 0) {
+        divisionsWithNoSlot.push(divSlug);
+      }
+    }
+
+    if (unavailableDivisions.length > 0) {
+      res.status(400).json({ 
+        message: `Divisi ${unavailableDivisions.join(', ')} tidak tersedia untuk sesi ini` 
+      });
       return;
     }
 
-    current.sisaSlot -= 1;
+    if (divisionsWithNoSlot.length > 0) {
+      res.status(400).json({ 
+        message: `Slot untuk divisi ${divisionsWithNoSlot.join(', ')} sudah penuh (maksimal 2 orang per divisi)` 
+      });
+      return;
+    }
+
+    const updatedDivisions: Array<{ slug: string; sisaSlot: number; lokasi: string }> = [];
+    
+    for (const divSlug of userDivisions) {
+      const current = slotDivisi[divSlug];
+      
+      if (!current || current.sisaSlot === undefined) {
+        res.status(400).json({ 
+          message: `Data slot untuk divisi ${divSlug} tidak valid` 
+        });
+        return;
+      }
+
+      current.sisaSlot -= 1;
+      updatedDivisions.push({
+        slug: divSlug,
+        sisaSlot: current.sisaSlot,
+        lokasi: current.lokasi || 'N/A' 
+      });
+    }
+
+    matchingSesi.slotTotal.current += 1;
     matchingSesi.dipilihOleh.push(userId);
 
     (user[tanggalFields] as any).tanggalId = wawancara.id;
@@ -140,8 +188,9 @@ async function handleWawancaraSelection(
       message: "Waktu wawancara berhasil dipilih",
       data: {
         jam: jamWawancaraDate,
-        lokasi: current.lokasi,
-        sisaSlot: current.sisaSlot,
+        divisiTerpilih: userDivisions,
+        updatedSlots: updatedDivisions,
+        sisaSlotSesi: matchingSesi.slotTotal.max - matchingSesi.slotTotal.current,
       },
     });
     return;
@@ -166,6 +215,7 @@ export const pilihWaktuWawancaraHima = async (
   await handleWawancaraSelection(req, res, true);
 };
 
+
 export const getAllWawancara = async (
   _req: Request,
   res: Response
@@ -176,13 +226,84 @@ export const getAllWawancara = async (
       Wawancara.find({ himakom: false }),
     ]);
     
-    console.log("Himakom count:", wawancaraHimakom.length);
-    console.log("OTI count:", wawancaraOti.length);
-    
     res.status(200).json({ wawancaraHimakom, wawancaraOti });
     return;
   } catch (err) {
     console.error("ERROR getAllWawancara", err);
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
+};
+
+export const getUserWawancaraSelections = async (
+  req: IGetRequestWithUser,
+  res: Response
+): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const { userId } = req.user;
+
+    const user = await User.findById(userId)
+      .populate<{ 
+        divisiPilihan: Array<{ 
+          divisiId: IDivisi; 
+          urutanPrioritas: number; 
+        }>
+        tanggalPilihanOti: { tanggalId: IWawancara; jam?: Date };
+        tanggalPilihanHima: { tanggalId: IWawancara; jam?: Date };
+      }>("divisiPilihan.divisiId tanggalPilihanOti.tanggalId tanggalPilihanHima.tanggalId");
+
+    if (!user) {
+      res.status(404).json({ message: "User tidak ditemukan" });
+      return;
+    }
+
+    const selections = [];
+
+    if (user.tanggalPilihanOti?.tanggalId && user.tanggalPilihanOti.jam) {
+      const otiDivisions = user.divisiPilihan
+        ?.filter(dp => dp.divisiId.himakom === false)
+        ?.map(dp => dp.divisiId.slug) || [];
+
+      selections.push({
+        tanggal: user.tanggalPilihanOti.tanggalId.tanggal,
+        jam: user.tanggalPilihanOti.jam.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Asia/Jakarta",
+          hour12: false
+        }),
+        himakom: false,
+        divisi: otiDivisions
+      });
+    }
+
+    if (user.tanggalPilihanHima?.tanggalId && user.tanggalPilihanHima.jam) {
+      const himaDivisions = user.divisiPilihan
+        ?.filter(dp => dp.divisiId.himakom === true)
+        ?.map(dp => dp.divisiId.slug) || [];
+
+      selections.push({
+        tanggal: user.tanggalPilihanHima.tanggalId.tanggal,
+        jam: user.tanggalPilihanHima.jam.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Asia/Jakarta",
+          hour12: false
+        }),
+        himakom: true,
+        divisi: himaDivisions
+      });
+    }
+
+    res.status(200).json({ selections });
+    return;
+  } catch (err) {
+    console.error("ERROR getUserWawancaraSelections", err);
     res.status(500).json({ message: "Internal server error" });
     return;
   }

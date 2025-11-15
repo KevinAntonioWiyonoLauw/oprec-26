@@ -1,9 +1,19 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 // fetch
 interface ScheduleSlot {
   id: string;
   sesi: Date;
   himakom: boolean;
   sessionId: string;
+}
+
+interface UserSelection {
+  tanggal: Date;
+  jam: string;
+  himakom: boolean;
 }
 
 type DivisionType =
@@ -26,9 +36,9 @@ type DivisionType =
 
 interface JadwalWawancaraProps {
   variant: "himakom" | "omahti";
-  disabled?: boolean; // true kalau user SUDAH memilih jadwal
-  slugWawancara: string; // slug divisi: "frontend", "backend", dll
-  pilihanDivisi: boolean; // true kalau user SUDAH memilih divisi
+  disabled?: boolean;
+  slugWawancara: string;
+  pilihanDivisi: boolean;
   wawancara: {
     himakom: boolean;
     _id: string;
@@ -36,6 +46,10 @@ interface JadwalWawancaraProps {
     sesi: {
       jam: Date;
       dipilihOleh: string[];
+      slotTotal: {
+        current: number;
+        max: number;
+      };
       slotDivisi: {
         backend: { sisaSlot: number; lokasi: string };
         frontend: { sisaSlot: number; lokasi: string };
@@ -137,13 +151,35 @@ const JadwalWawancara: React.FC<JadwalWawancaraProps> = ({
                   slugWawancara
                     ? session.slotDivisi[slugWawancara as DivisionType]
                     : undefined;
+                    
+                const isSesiFull = session.slotTotal.current >= session.slotTotal.max;
 
-                const hasSlot =
+                const isDivisiSlotAvailable =
                   !slugWawancara
                     ? false
                     : slotInfo === undefined
                       ? true
                       : slotInfo.sisaSlot > 0;
+
+                const hasSlot = !isSesiFull && isDivisiSlotAvailable;
+               
+                if (slugWawancara && slotInfo) {
+                  const totalSlotDivisi = 2; // Maksimal 2 per divisi
+                  const terdaftarDivisi = totalSlotDivisi - slotInfo.sisaSlot;
+                  
+                  console.log(
+                    `[${variant.toUpperCase()}] ${date} ${timeString} - Divisi ${slugWawancara}:`,
+                    {
+                      totalSesi: `${session.slotTotal.current}/${session.slotTotal.max} orang`,
+                      divisiIni: `${terdaftarDivisi}/${totalSlotDivisi} orang`,
+                      sisaSlotDivisi: slotInfo.sisaSlot,
+                      lokasi: slotInfo.lokasi,
+                      isSesiFull,
+                      isDivisiSlotAvailable,
+                      hasSlot,
+                    }
+                  );
+                }
 
                 const isSelected =
                   selectedSlot?.sessionId === session._id &&

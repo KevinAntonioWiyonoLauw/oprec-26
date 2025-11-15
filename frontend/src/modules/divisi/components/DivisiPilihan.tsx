@@ -53,7 +53,7 @@ export default function DivisiPilihan({
                 fill: "row",
                 rows: 1,
               },
-              enabled: false, // Disables swiping on desktop
+              enabled: false, 
             },
           }}
         >
