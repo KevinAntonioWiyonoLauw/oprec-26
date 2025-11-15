@@ -33,7 +33,18 @@ export async function POST(
 
     const data = await res.json().catch(() => ({}));
 
-    return NextResponse.json(data, { status: res.status });
+    // Forward cookies from backend to frontend
+    const response = NextResponse.json(data, { status: res.status });
+    
+    // Get Set-Cookie headers from backend response
+    const setCookieHeaders = res.headers.getSetCookie();
+    
+    // Forward each cookie to the client
+    setCookieHeaders.forEach((cookie) => {
+      response.headers.append("Set-Cookie", cookie);
+    });
+
+    return response;
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error" },
