@@ -128,9 +128,10 @@ const Penugasan = ({
       <div className="mt-2 space-y-3">
         <div className="flex flex-col gap-1">
           <h1 className="font-semibold">Brief Penugasan</h1>
-          <div className="w-full text-justify text-[0.9rem] leading-relaxed">
-            {data.penugasan.deskripsiPenugasan}
-          </div>
+          <div 
+            className="w-full text-justify text-[0.9rem] leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: data.penugasan.deskripsiPenugasan }}
+          />
         </div>
 
         <div className="flex flex-col gap-1">
