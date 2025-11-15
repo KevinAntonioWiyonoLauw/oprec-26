@@ -39,9 +39,9 @@ export const hasEnrolledInClass = async (slug: string) => {
     accessToken as string,
   );
 
-  const enrolledSlugs = enrolledDivisions.map(
-    (division) => division.divisiId.slug,
-  );
+  const enrolledSlugs = enrolledDivisions
+    .filter((division) => division && division.divisiId) // Filter null/undefined
+    .map((division) => division.divisiId.slug);
 
   // returns a boolean
   return enrolledSlugs.includes(slug);
@@ -53,8 +53,13 @@ export const hasMaxEnrollment = async () => {
     accessToken as string,
   );
 
+  // Filter valid divisions only
+  const validDivisions = enrolledDivisions.filter(
+    (division) => division && division.divisiId
+  );
+
   // returns a boolean
-  return enrolledDivisions.length >= 4;
+  return validDivisions.length >= 4;
 };
 
 export const hasEnrolled = async () => {
@@ -63,10 +68,15 @@ export const hasEnrolled = async () => {
     accessToken as string,
   );
 
-  const hasHimakom = enrolledDivisions.some(
+  // Filter valid divisions first
+  const validDivisions = enrolledDivisions.filter(
+    (division) => division && division.divisiId
+  );
+
+  const hasHimakom = validDivisions.some(
     (division) => division.divisiId.himakom
   );
-  const hasOmahti = enrolledDivisions.some(
+  const hasOmahti = validDivisions.some(
     (division) => !division.divisiId.himakom
   );
 
@@ -80,16 +90,23 @@ export const getEnrollmentPriorities = async () => {
     accessToken as string,
   );
 
-  const prioritiesTaken = enrolledDivisions.map(
+  // Filter out null/undefined divisions
+  const validDivisions = enrolledDivisions.filter(
+    (division) => division && division.divisiId
+  );
+
+  const prioritiesTaken = validDivisions.map(
     (division) => division.urutanPrioritas
   );
 
-  const divisionsByPriority = enrolledDivisions.map(division => ({
-    priority: division.urutanPrioritas,
-    name: division.divisiId.judul,
-    slug: division.divisiId.slug,
-    himakom: division.divisiId.himakom
-  })).sort((a, b) => a.priority - b.priority);
+  const divisionsByPriority = validDivisions
+    .map(division => ({
+      priority: division.urutanPrioritas,
+      name: division.divisiId.judul,
+      slug: division.divisiId.slug,
+      himakom: division.divisiId.himakom
+    }))
+    .sort((a, b) => a.priority - b.priority);
 
   // prioritiesTaken returns a list of numbers e.g. [1, 3, 4]
   // divisionsByPriority returns a list of objects ordered by priority 
