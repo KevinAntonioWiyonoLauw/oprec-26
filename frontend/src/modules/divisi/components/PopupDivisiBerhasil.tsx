@@ -50,7 +50,7 @@ export default function PopupDivisiBerhasil({
           {divisiName && (
             <p className="mb-2 text-sm text-white">
               Kamu telah memilih divisi{" "}
-              <span className="font-semibold text-custom-blue">{divisiName}</span>{" "}
+              <span className="font-semibold text-white">{divisiName}</span>{" "}
               untuk {isHimakom ? "HIMAKOM" : "OmahTI"}
             </p>
           )}
@@ -63,13 +63,13 @@ export default function PopupDivisiBerhasil({
         <div className="mx-4 my-3 rounded-lg border border-custom-blue/30 bg-custom-gray p-4">
           <div className="flex items-start gap-3">
             <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-custom-blue/20">
-              <Calendar className="h-4 w-4 text-custom-blue" />
+              <Calendar className="h-4 w-4 text-white" />
             </div>
             <div className="space-y-1 text-left">
               <p className="text-sm font-medium text-white">
                 Pilih Jadwal Wawancara
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-sm text-white">
                 Segera pilih waktu wawancara sebelum slot penuh!
               </p>
             </div>
