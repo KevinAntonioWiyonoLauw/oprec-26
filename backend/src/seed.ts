@@ -132,7 +132,28 @@ const seedDivisi = async () => {
         logoDivisi: 'MOBAPPS.png',
         slot: 6,
         slug: 'mobapps',
-        proker: [],
+        proker: [
+          {
+            url: '/assets/proker/mobapps0.webp',
+            filename: 'mobapps0.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          },
+          {
+            url: '/assets/proker/mobapps1.webp',
+            filename: 'mobapps1.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          },
+          {
+            url: '/assets/proker/mobapps2.webp',
+            filename: 'mobapps2.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          },
+          {
+            url: '/assets/proker/mobapps3.webp',
+            filename: 'mobapps3.webp',
+            deskripsiProker: 'Pelatihan divisi Mobile Apps'
+          }
+        ],
         deskripsi: 'Divisi Mobile Apps mengembangkan aplikasi mobile untuk Android dan iOS. Mempelajari Flutter, React Native, Kotlin/Swift untuk membangun aplikasi yang performant.',
         dipilihOleh: [],
         himakom: false,
@@ -196,8 +217,29 @@ const seedDivisi = async () => {
         judulPanjang: 'Bendahara',
         logoDivisi: 'treasurer.png',
         slot: 3,
-        slug: 'sekbend',
-        proker: [],
+        slug: 'treasurer',
+        proker: [
+          {
+            url: '/assets/proker/ETT.webp',
+            filename: 'ETT.webp',
+            deskripsiProker: 'Evaluasi Akhir Tahun'
+          },
+          {
+            url: '/assets/proker/Firstgathering sekbend.webp',
+            filename: 'Firstgathering sekbend.webp',
+            deskripsiProker: 'First gathering sekbend'
+          },
+          {
+            url: '/assets/proker/pra-sidang bkm sekbend.webp',
+            filename: 'pra-sidang bkm sekbend.webp',
+            deskripsiProker: 'Pra-sidang BKM sekbend'
+          },
+          {
+            url: '/assets/proker/sekbend openhouse.webp',
+            filename: 'sekbend openhouse.webp',
+            deskripsiProker: 'Sekbend di openhouse'
+          }
+        ],
         deskripsi: 'Divisi Treasurer mengelola keuangan HIMAKOM secara menyeluruh. Membuat laporan keuangan, mengelola cash flow, budgeting, dan tracking keuangan organisasi dengan transparan.',
         dipilihOleh: [],
         himakom: true,
@@ -213,8 +255,29 @@ const seedDivisi = async () => {
         judulPanjang: 'Sekretaris',
         logoDivisi: 'secretary.png',
         slot: 3,
-        slug: 'sekbend',
-        proker: [],
+        slug: 'secretary',
+        proker: [
+          {
+            url: '/assets/proker/ETT.webp',
+            filename: 'ETT.webp',
+            deskripsiProker: 'Evaluasi Akhir Tahun'
+          },
+          {
+            url: '/assets/proker/Firstgathering sekbend.webp',
+            filename: 'Firstgathering sekbend.webp',
+            deskripsiProker: 'First gathering sekbend'
+          },
+          {
+            url: '/assets/proker/pra-sidang bkm sekbend.webp',
+            filename: 'pra-sidang bkm sekbend.webp',
+            deskripsiProker: 'Pra-sidang BKM sekbend'
+          },
+          {
+            url: '/assets/proker/sekbend openhouse.webp',
+            filename: 'sekbend openhouse.webp',
+            deskripsiProker: 'Sekbend di openhouse'
+          }
+        ],
         deskripsi: 'Divisi Secretary mengelola administrasi dan dokumentasi HIMAKOM. Membuat notulensi rapat, mengelola arsip, dan mengatur surat-menyurat organisasi dengan sistematis.',
         dipilihOleh: [],
         himakom: true,
@@ -323,7 +386,13 @@ const seedDivisi = async () => {
         logoDivisi: 'media.png',
         slot: 5,
         slug: 'media',
-        proker: [],
+        proker: [
+          {
+            url: '/assets/proker/pemotretan divisi media.webp',
+            filename: 'pemotretan divisi media.webp',
+            deskripsiProker: 'Sesi pemotretan divisi media'
+          }
+        ],
         deskripsi: 'Divisi Media mengelola konten visual, photography, videography, dan desain grafis HIMAKOM. Membuat konten engaging untuk social media dan dokumentasi event.',
         dipilihOleh: [],
         himakom: true,
