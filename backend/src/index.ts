@@ -19,7 +19,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL || "https://oprec-makomti26.vercel.app",
+  process.env.FRONTEND_COMPLETE_URL || "https://oprec-makomti26.vercel.app",
   "http://localhost:3000"
 ];
 
