@@ -17,7 +17,7 @@ import Treasurer from "@/assets/logo/himakom/treasurer.png";
 
 export const Logos = {
   "backend": BE,
-  "cp": CP,
+  "compro": CP,
   "cysec": CySec,
   "dsai": DSAI,
   "frontend": FE,
