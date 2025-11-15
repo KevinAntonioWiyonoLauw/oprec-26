@@ -10,57 +10,60 @@ import Divisi from "../models/divisiModels";
 import Mahasiswa from "../models/mahasiswaModels";
 import { IPenugasan } from "../types/IPenugasan";
 import { IUser } from "../types/IUser";
+import { isAdminNim } from "../utils/adminNim";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
-    try{
-        const {email, username, password, NIM} = req.body;
-        
-        const existingUser = await User.findOne({$or: [ {email}, {username} ]}).lean();
-        if (existingUser){ 
-            res.status(400).json({message: "User exists"}) 
-            return;
-        }
-        
-        const adminNIM: string = process.env.ADMIN_NIM || "";
-        const validNIM = await Mahasiswa.findOne({ NIM }).lean();
-        
-        if(!validNIM && (NIM !== adminNIM)){
-            res.status(400).json({message: "KAMU BUKAN MAHASISWA ILMU KOMPUTER AKT 24 ATAU 25"});
-            return;
-        }
-        
-        const isAdmin = NIM === adminNIM;
-        
-        const userData = {email, username, password, NIM, isAdmin};
-        const user = await User.create(userData);
+  try {
+    const { email, username, password, NIM } = req.body;
 
-        const tokens = generateTokens({
-            userId: user.id,
-            username: user.username,
-            NIM: user.NIM,
-            isAdmin: user.isAdmin,
-            enrolledSlugHima: user.enrolledSlugHima,
-            enrolledSlugOti: user.enrolledSlugOti
-        })
-        user.accessToken = tokens.accessToken;
-        user.refreshToken = tokens.refreshToken;
-        await user.save();
-        setCookies(res, tokens, COOKIE_CONFIG);
-
-        const { password: _pwd, accessToken: _at, refreshToken: _rt, ...userResponse } = user.toObject();
-
-        res.status(201).json({
-            message: "User created",
-            accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken,
-            user: userResponse
-        })
-        return;
-    } catch (err) {
-        res.status(500).json({message: "Registration error"});
-        return;
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] }).lean();
+    if (existingUser) {
+      res.status(400).json({ message: "User exists" });
+      return;
     }
-}
+
+    const validNIM = await Mahasiswa.findOne({ NIM }).lean();
+
+    if (!validNIM && !isAdminNim(NIM)) {
+      res
+        .status(400)
+        .json({ message: "KAMU BUKAN MAHASISWA ILMU KOMPUTER AKT 24 ATAU 25" });
+      return;
+    }
+
+    const isAdmin = isAdminNim(NIM);
+
+    const userData = { email, username, password, NIM, isAdmin };
+    const user = await User.create(userData);
+
+    const tokens = generateTokens({
+      userId: user.id,
+      username: user.username,
+      NIM: user.NIM,
+      isAdmin: user.isAdmin,
+      enrolledSlugHima: user.enrolledSlugHima,
+      enrolledSlugOti: user.enrolledSlugOti,
+    });
+    user.accessToken = tokens.accessToken;
+    user.refreshToken = tokens.refreshToken;
+    await user.save();
+    setCookies(res, tokens, COOKIE_CONFIG);
+
+    const { password: _pwd, accessToken: _at, refreshToken: _rt, ...userResponse } =
+      user.toObject();
+
+    res.status(201).json({
+      message: "User created",
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user: userResponse,
+    });
+    return;
+  } catch (err) {
+    res.status(500).json({ message: "Registration error" });
+    return;
+  }
+};
 
 export const login = async (req: Request, res: Response): Promise<void> => {
     try{

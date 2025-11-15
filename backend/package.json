@@ -7,6 +7,9 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
+    "seed": "ts-node seed/seed.ts",
+    "seedW": "ts-node seed/seedWawancara.ts",
+    "seedA": "ts-node seed/seedAdmin.ts",
     "lint": "eslint src/*/.ts",
     "format": "prettier --write 'src/*/.ts'",
     "type-check": "tsc --noEmit"

@@ -1,30 +1,48 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import Divisi from './models/divisiModels'; // Adjust the path to your Divisi model
+import Divisi from './models/divisiModels';
 import Wawancara from './models/wawancaraModels';
-console.log(Divisi);
+
 dotenv.config();
+
+// Helper: Convert WIB time to UTC Date
+// dateStr: "2025-11-21", timeStr: "12:00"
+function wibToUTC(dateStr: string, timeStr: string): Date {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  const [hour, minute] = timeStr.split(":").map(Number);
+  
+  // Buat Date UTC dengan mengurangi 7 jam dari waktu WIB
+  const utcDate = new Date(Date.UTC(year, month - 1, day, hour - 7, minute, 0));
+  
+  return utcDate;
+}
+
 const seedDivisi = async () => {
   try {
-    // Connect to MongoDB (replace the URI with your actual connection string)
-    await mongoose.connect(`${process.env.MONGODB_URI}`, {serverSelectionTimeoutMS: 20000});
-    console.log("connected");
+    await mongoose.connect(`${process.env.MONGODB_URI}`, { serverSelectionTimeoutMS: 20000 });
+    console.log("Connected to MongoDB");
 
-    // Array of division data to be inserted
+    // Clear existing data
+    await Divisi.deleteMany({});
+    await Wawancara.deleteMany({});
+    console.log("Cleared existing data");
+
+    // Deadline: 21 November 2025, 12:00 WIB
+    const deadlineWIB = wibToUTC("2025-11-21", "12:00");
+
     const divisiData = [
+      // OmahTI Divisions
       {
         judul: 'Backend',
         judulPanjang: 'Backend Development',
         logoDivisi: 'backend_logo.png',
         slot: 10,
         slug: 'backend',
-        proker: [
-          {
-            url: 'https://example.com/backend_proker',
-            filename: 'backend_proker.pdf',
-            deskripsiProker: 'Backend division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/backend_proker',
+          filename: 'backend_proker.pdf',
+          deskripsiProker: 'Backend division project description',
+        }],
         deskripsi: 'Responsible for server-side logic and database management.',
         dipilihOleh: [],
         himakom: false,
@@ -32,7 +50,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Complete a backend task.',
           toolsPenugasan: 'Node.js, Express',
           linkPenugasan: 'https://example.com/backend_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
@@ -41,13 +59,11 @@ const seedDivisi = async () => {
         logoDivisi: 'frontend_logo.png',
         slot: 8,
         slug: 'frontend',
-        proker: [
-          {
-            url: 'https://example.com/frontend_proker',
-            filename: 'frontend_proker.pdf',
-            deskripsiProker: 'Frontend division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/frontend_proker',
+          filename: 'frontend_proker.pdf',
+          deskripsiProker: 'Frontend division project description',
+        }],
         deskripsi: 'Focuses on the visual elements and user experience.',
         dipilihOleh: [],
         himakom: false,
@@ -55,7 +71,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Build a frontend interface.',
           toolsPenugasan: 'React, Vue.js',
           linkPenugasan: 'https://example.com/frontend_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
@@ -64,13 +80,11 @@ const seedDivisi = async () => {
         logoDivisi: 'uiux_logo.png',
         slot: 5,
         slug: 'uiux',
-        proker: [
-          {
-            url: 'https://example.com/uiux_proker',
-            filename: 'uiux_proker.pdf',
-            deskripsiProker: 'UI/UX division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/uiux_proker',
+          filename: 'uiux_proker.pdf',
+          deskripsiProker: 'UI/UX division project description',
+        }],
         deskripsi: 'Designs user interfaces and improves user experience.',
         dipilihOleh: [],
         himakom: false,
@@ -78,7 +92,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Design a user-friendly interface.',
           toolsPenugasan: 'Figma, Adobe XD',
           linkPenugasan: 'https://example.com/uiux_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
@@ -87,13 +101,11 @@ const seedDivisi = async () => {
         logoDivisi: 'dsai_logo.png',
         slot: 6,
         slug: 'dsai',
-        proker: [
-          {
-            url: 'https://example.com/dsai_proker',
-            filename: 'dsai_proker.pdf',
-            deskripsiProker: 'Data Science division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/dsai_proker',
+          filename: 'dsai_proker.pdf',
+          deskripsiProker: 'Data Science division project description',
+        }],
         deskripsi: 'Analyzes data and builds AI models.',
         dipilihOleh: [],
         himakom: false,
@@ -101,7 +113,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Create a data analysis project.',
           toolsPenugasan: 'Python, TensorFlow',
           linkPenugasan: 'https://example.com/dsai_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
@@ -110,13 +122,11 @@ const seedDivisi = async () => {
         logoDivisi: 'cp_logo.png',
         slot: 7,
         slug: 'cp',
-        proker: [
-          {
-            url: 'https://example.com/cp_proker',
-            filename: 'cp_proker.pdf',
-            deskripsiProker: 'Competitive Programming division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/cp_proker',
+          filename: 'cp_proker.pdf',
+          deskripsiProker: 'Competitive Programming division project description',
+        }],
         deskripsi: 'Solves algorithmic challenges and competes in programming competitions.',
         dipilihOleh: [],
         himakom: false,
@@ -124,7 +134,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Solve a programming challenge.',
           toolsPenugasan: 'C++, Java',
           linkPenugasan: 'https://example.com/cp_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
@@ -133,13 +143,11 @@ const seedDivisi = async () => {
         logoDivisi: 'mobapps_logo.png',
         slot: 6,
         slug: 'mobapps',
-        proker: [
-          {
-            url: 'https://example.com/mobapps_proker',
-            filename: 'mobapps_proker.pdf',
-            deskripsiProker: 'Mobile Apps division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/mobapps_proker',
+          filename: 'mobapps_proker.pdf',
+          deskripsiProker: 'Mobile Apps division project description',
+        }],
         deskripsi: 'Develops mobile applications for Android and iOS.',
         dipilihOleh: [],
         himakom: false,
@@ -147,7 +155,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Create a mobile app.',
           toolsPenugasan: 'Flutter, React Native',
           linkPenugasan: 'https://example.com/mobapps_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
@@ -156,13 +164,11 @@ const seedDivisi = async () => {
         logoDivisi: 'gamedev_logo.png',
         slot: 4,
         slug: 'gamedev',
-        proker: [
-          {
-            url: 'https://example.com/gamedev_proker',
-            filename: 'gamedev_proker.pdf',
-            deskripsiProker: 'Game Development division project description',
-          },
-        ],
+        proker: [{
+          url: 'https://example.com/gamedev_proker',
+          filename: 'gamedev_proker.pdf',
+          deskripsiProker: 'Game Development division project description',
+        }],
         deskripsi: 'Develops games for multiple platforms.',
         dipilihOleh: [],
         himakom: false,
@@ -170,321 +176,285 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Create a game prototype.',
           toolsPenugasan: 'Unity, Unreal Engine',
           linkPenugasan: 'https://example.com/gamedev_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'Cysec',
         judulPanjang: 'Cyber Security',
-        logoDivisi: 'gamedev_logo.png',
+        logoDivisi: 'cysec_logo.png',
         slot: 4,
         slug: 'cysec',
-        proker: [
-          {
-            url: 'https://example.com/gamedevhima_proker',
-            filename: 'gamedevhima_proker.pdf',
-            deskripsiProker: 'Game Development division project description',
-          },
-        ],
-        deskripsi: 'Develops games for multiple platforms.',
+        proker: [{
+          url: 'https://example.com/cysec_proker',
+          filename: 'cysec_proker.pdf',
+          deskripsiProker: 'Cyber Security division project description',
+        }],
+        deskripsi: 'Secures systems and networks.',
         dipilihOleh: [],
         himakom: false,
         penugasan: {
-          deskripsiPenugasan: 'Create a game prototype.',
-          toolsPenugasan: 'Unity, Unreal Engine',
-          linkPenugasan: 'https://example.com/gamedevhima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete a security task.',
+          toolsPenugasan: 'Kali Linux, Wireshark',
+          linkPenugasan: 'https://example.com/cysec_task',
+          deadline: deadlineWIB,
         },
       },
+      // HIMAKOM Divisions
       {
         judul: 'Treasurer',
         judulPanjang: 'Basically Bendahara',
-        logoDivisi: 'backendhima_logo.png',
+        logoDivisi: 'treasurer_logo.png',
         slot: 10,
         slug: 'treasurer',
-        proker: [
-          {
-            url: 'https://example.com/backendhima_proker',
-            filename: 'backendhima_proker.pdf',
-            deskripsiProker: 'Backendhima division project description',
-          },
-        ],
-        deskripsi: 'Responsible for server-side logic and database management.',
+        proker: [{
+          url: 'https://example.com/treasurer_proker',
+          filename: 'treasurer_proker.pdf',
+          deskripsiProker: 'Treasurer division project description',
+        }],
+        deskripsi: 'Manages finances.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Complete a backendhima task.',
-          toolsPenugasan: 'Node.js, Express',
-          linkPenugasan: 'https://example.com/backendhima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete a treasurer task.',
+          toolsPenugasan: 'Excel',
+          linkPenugasan: 'https://example.com/treasurer_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'Secretary',
         judulPanjang: 'Penulis',
-        logoDivisi: 'frontendhima_logo.png',
+        logoDivisi: 'secretary_logo.png',
         slot: 8,
         slug: 'secretary',
-        proker: [
-          {
-            url: 'https://example.com/frontendhima_proker',
-            filename: 'frontendhima_proker.pdf',
-            deskripsiProker: 'Frontendhima division project description',
-          },
-        ],
-        deskripsi: 'Focuses on the visual elements and user experience.',
+        proker: [{
+          url: 'https://example.com/secretary_proker',
+          filename: 'secretary_proker.pdf',
+          deskripsiProker: 'Secretary division project description',
+        }],
+        deskripsi: 'Handles documentation.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Build a frontendhima interface.',
-          toolsPenugasan: 'React, Vue.js',
-          linkPenugasan: 'https://example.com/frontendhima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete a secretary task.',
+          toolsPenugasan: 'Word, Notion',
+          linkPenugasan: 'https://example.com/secretary_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'HR',
-        judulPanjang: 'Human Resources PSDM COK',
-        logoDivisi: 'uiux_logo.png',
+        judulPanjang: 'Human Resources PSDM',
+        logoDivisi: 'hr_logo.png',
         slot: 5,
         slug: 'hr',
-        proker: [
-          {
-            url: 'https://example.com/uiuxhima_proker',
-            filename: 'uiuxhima_proker.pdf',
-            deskripsiProker: 'UI/UX division project description',
-          },
-        ],
-        deskripsi: 'Designs user interfaces and improves user experience.',
+        proker: [{
+          url: 'https://example.com/hr_proker',
+          filename: 'hr_proker.pdf',
+          deskripsiProker: 'HR division project description',
+        }],
+        deskripsi: 'Manages human resources.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Design a user-friendly interface.',
-          toolsPenugasan: 'Figma, Adobe XD',
-          linkPenugasan: 'https://example.com/uiuxhima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete an HR task.',
+          toolsPenugasan: 'Google Forms',
+          linkPenugasan: 'https://example.com/hr_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'IPC',
         judulPanjang: 'Internal Control',
-        logoDivisi: 'dsaihima_logo.png',
+        logoDivisi: 'ipc_logo.png',
         slot: 6,
         slug: 'ipc',
-        proker: [
-          {
-            url: 'https://example.com/dsaihima_proker',
-            filename: 'dsaihima_proker.pdf',
-            deskripsiProker: 'Data Science division project description',
-          },
-        ],
-        deskripsi: 'Analyzes data and builds AI models.',
+        proker: [{
+          url: 'https://example.com/ipc_proker',
+          filename: 'ipc_proker.pdf',
+          deskripsiProker: 'IPC division project description',
+        }],
+        deskripsi: 'Internal control and audit.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Create a data analysis project.',
-          toolsPenugasan: 'Python, TensorFlow',
-          linkPenugasan: 'https://example.com/dsaihima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete an IPC task.',
+          toolsPenugasan: 'Audit tools',
+          linkPenugasan: 'https://example.com/ipc_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'S&F',
         judulPanjang: 'Sponsorship & Fundraising',
-        logoDivisi: 'cp_logo.png',
+        logoDivisi: 'snf_logo.png',
         slot: 7,
         slug: 'snf',
-        proker: [
-          {
-            url: 'https://example.com/cphima_proker',
-            filename: 'cphima_proker.pdf',
-            deskripsiProker: 'Competitive Programming division project description',
-          },
-        ],
-        deskripsi: 'Solves algorithmic challenges and competes in programming competitions.',
+        proker: [{
+          url: 'https://example.com/snf_proker',
+          filename: 'snf_proker.pdf',
+          deskripsiProker: 'S&F division project description',
+        }],
+        deskripsi: 'Handles sponsorships.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Solve a programming challenge.',
-          toolsPenugasan: 'C++, Java',
-          linkPenugasan: 'https://example.com/cphima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete an S&F task.',
+          toolsPenugasan: 'Proposal writing',
+          linkPenugasan: 'https://example.com/snf_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'Skilldev',
         judulPanjang: 'Skill Development',
-        logoDivisi: 'mobapps_logo.png',
+        logoDivisi: 'skilldev_logo.png',
         slot: 6,
         slug: 'skilldev',
-        proker: [
-          {
-            url: 'https://example.com/mobappshima_proker',
-            filename: 'mobappshima_proker.pdf',
-            deskripsiProker: 'Mobile Apps division project description',
-          },
-        ],
-        deskripsi: 'Develops mobile applications for Android and iOS.',
+        proker: [{
+          url: 'https://example.com/skilldev_proker',
+          filename: 'skilldev_proker.pdf',
+          deskripsiProker: 'Skilldev division project description',
+        }],
+        deskripsi: 'Develops member skills.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Create a mobile app.',
-          toolsPenugasan: 'Flutter, React Native',
-          linkPenugasan: 'https://example.com/mobappshima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete a skilldev task.',
+          toolsPenugasan: 'Training materials',
+          linkPenugasan: 'https://example.com/skilldev_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'Media',
-        judulPanjang: 'PDD COK DDD',
-        logoDivisi: 'gamedev_logo.png',
+        judulPanjang: 'Media & Publication',
+        logoDivisi: 'media_logo.png',
         slot: 4,
         slug: 'media',
-        proker: [
-          {
-            url: 'https://example.com/gamedevhima_proker',
-            filename: 'gamedevhima_proker.pdf',
-            deskripsiProker: 'Game Development division project description',
-          },
-        ],
-        deskripsi: 'Develops games for multiple platforms.',
+        proker: [{
+          url: 'https://example.com/media_proker',
+          filename: 'media_proker.pdf',
+          deskripsiProker: 'Media division project description',
+        }],
+        deskripsi: 'Handles media and publications.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Create a game prototype.',
-          toolsPenugasan: 'Unity, Unreal Engine',
-          linkPenugasan: 'https://example.com/gamedevhima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete a media task.',
+          toolsPenugasan: 'Photoshop, Canva',
+          linkPenugasan: 'https://example.com/media_task',
+          deadline: deadlineWIB,
         },
       },
       {
         judul: 'PR',
         judulPanjang: 'Public Relations',
-        logoDivisi: 'gamedev_logo.png',
+        logoDivisi: 'pr_logo.png',
         slot: 4,
         slug: 'pr',
-        proker: [
-          {
-            url: 'https://example.com/gamedevhima_proker',
-            filename: 'gamedevhima_proker.pdf',
-            deskripsiProker: 'Game Development division project description',
-          },
-        ],
-        deskripsi: 'Develops games for multiple platforms.',
+        proker: [{
+          url: 'https://example.com/pr_proker',
+          filename: 'pr_proker.pdf',
+          deskripsiProker: 'PR division project description',
+        }],
+        deskripsi: 'Public relations.',
         dipilihOleh: [],
         himakom: true,
         penugasan: {
-          deskripsiPenugasan: 'Create a game prototype.',
-          toolsPenugasan: 'Unity, Unreal Engine',
-          linkPenugasan: 'https://example.com/gamedevhima_task',
-          deadline: new Date(2025, 10, 21, 12, 0), // November 21, 2025, 12:00 PM
+          deskripsiPenugasan: 'Complete a PR task.',
+          toolsPenugasan: 'Social media',
+          linkPenugasan: 'https://example.com/pr_task',
+          deadline: deadlineWIB,
         },
       },
     ];
 
-const wawancaraData = [];
-const divisiSlotsHima = {
-  treasurer: { sisaSlot: 1, lokasi: 'IUP Room' },
-  hr: { sisaSlot: 1, lokasi: 'IUP Room' },
-  ipc: { sisaSlot: 1, lokasi: 'IUP Room' },
-  pr: { sisaSlot: 1, lokasi: 'IUP Room' },
-  skilldev: { sisaSlot: 1, lokasi: 'IUP Room' },
-  snf: { sisaSlot: 1, lokasi: 'IUP Room' },
-  secretary: { sisaSlot: 1, lokasi: 'IUP Room' },
-  media: { sisaSlot: 1, lokasi: 'IUP Room' },
-};console.log(divisiSlotsHima);
+    // ===== WAWANCARA DATA =====
+    const wawancaraData = [];
 
-const divisiSlotsOti = {
-  frontend: { sisaSlot: 1, lokasi: 'IUP Room' },
-  backend: { sisaSlot: 1, lokasi: 'IUP Room' },
-  cysec: { sisaSlot: 1, lokasi: 'IUP Room' },
-  uiux: { sisaSlot: 1, lokasi: 'IUP Room' },
-  cp: { sisaSlot: 1, lokasi: 'IUP Room' },
-  mobapss: { sisaSlot: 1, lokasi: 'IUP Room' },
-  gamedev: { sisaSlot: 1, lokasi: 'IUP Room' },
-  dsai: { sisaSlot: 1, lokasi: 'IUP Room' },
-}; console.log(divisiSlotsOti);
+    const divisiSlotsHima = {
+      treasurer: { sisaSlot: 10, lokasi: 'IUP Room' },
+      hr: { sisaSlot: 10, lokasi: 'IUP Room' },
+      ipc: { sisaSlot: 10, lokasi: 'IUP Room' },
+      pr: { sisaSlot: 10, lokasi: 'IUP Room' },
+      skilldev: { sisaSlot: 10, lokasi: 'IUP Room' },
+      snf: { sisaSlot: 10, lokasi: 'IUP Room' },
+      secretary: { sisaSlot: 10, lokasi: 'IUP Room' },
+      media: { sisaSlot: 10, lokasi: 'IUP Room' },
+    };
 
-// HIMAKOM Interview: 23-24 November 2025 (Sunday - Monday)
-for (let day = 23; day <= 24; day++) {
-  const sesi = [];
-  const startHour = 18;
-  const startMinute = 20;
-  const intervalMinutes = 35;
+    const divisiSlotsOti = {
+      frontend: { sisaSlot: 10, lokasi: 'IUP Room' },
+      backend: { sisaSlot: 10, lokasi: 'IUP Room' },
+      cysec: { sisaSlot: 10, lokasi: 'IUP Room' },
+      uiux: { sisaSlot: 10, lokasi: 'IUP Room' },
+      cp: { sisaSlot: 10, lokasi: 'IUP Room' },
+      mobapps: { sisaSlot: 10, lokasi: 'IUP Room' },
+      gamedev: { sisaSlot: 10, lokasi: 'IUP Room' },
+      dsai: { sisaSlot: 10, lokasi: 'IUP Room' },
+    };
 
-  for (let h = startHour, m = startMinute; h < 20 || (h === 20 && m <= 30); ) {
-    sesi.push({
-      jam: new Date(2025, 10, day, h, m), // November 2025 (month index 10)
-      dipilihOleh: [],
-      slotDivisi: JSON.parse(JSON.stringify(divisiSlotsHima)),
-    });
+    // HIMAKOM Interview: 23-24 November 2025 (Minggu - Senin)
+    // Jadwal: 10:15, 10:50, 11:25, 13:10, 13:45, 14:20, 14:55, 15:30 WIB
+    const himakomTimes = [
+      "10:15", "10:50", "11:25", "13:10", "13:45", "14:20", "14:55", "15:30"
+    ];
 
-    m += intervalMinutes;
-    if (m >= 60) {
-      h += 1;
-      m -= 60;
+    for (let day = 23; day <= 24; day++) {
+      const sesi = himakomTimes.map((time) => ({
+        jam: wibToUTC(`2025-11-${day}`, time),
+        dipilihOleh: [],
+        slotDivisi: JSON.parse(JSON.stringify(divisiSlotsHima)),
+      }));
+
+      wawancaraData.push({
+        tanggal: wibToUTC(`2025-11-${day}`, "00:00"),
+        himakom: true,
+        sesi,
+      });
     }
-  }
 
-  wawancaraData.push({
-    tanggal: new Date(2025, 10, day), // November 2025
-    himakom: true,
-    sesi,
-  });
-}
+    // OTI Interview: 25-28 November 2025 (Selasa - Jumat)
+    // Jadwal: 18:20, 18:55, 19:25, 20:00 WIB
+    const otiTimes = ["18:20", "18:55", "19:25", "20:00"];
 
-// OTI Interview: 25-28 November 2025 (Tuesday - Friday)
-for (let day = 25; day <= 28; day++) {
-  const sesi = [];
-  const startHour = 18;
-  const startMinute = 20;
-  const intervalMinutes = 35;
+    for (let day = 25; day <= 28; day++) {
+      const sesi = otiTimes.map((time) => ({
+        jam: wibToUTC(`2025-11-${day}`, time),
+        dipilihOleh: [],
+        slotDivisi: JSON.parse(JSON.stringify(divisiSlotsOti)),
+      }));
 
-  for (let h = startHour, m = startMinute; h < 20 || (h === 20 && m <= 30); ) {
-    sesi.push({
-      jam: new Date(2025, 10, day, h, m), // November 2025 (month index 10)
-      dipilihOleh: [],
-      slotDivisi: JSON.parse(JSON.stringify(divisiSlotsOti)),
-    });
-
-    m += intervalMinutes;
-    if (m >= 60) {
-      h += 1;
-      m -= 60;
+      wawancaraData.push({
+        tanggal: wibToUTC(`2025-11-${day}`, "00:00"),
+        himakom: false,
+        sesi,
+      });
     }
-  }
 
-  wawancaraData.push({
-    tanggal: new Date(2025, 10, day), // November 2025
-    himakom: false,
-    sesi,
-  });
-}
+    console.log("Sample wawancara data:", JSON.stringify(wawancaraData[0], null, 2));
 
-console.log(wawancaraData);
-    // Insert the data into the Divisi collection
-  console.log(divisiData);
-    
     // Insert divisi data
-    for(const divisi of divisiData){
+    for (const divisi of divisiData) {
       const divisiBaru = new Divisi(divisi);
       await divisiBaru.save();
     }
-    console.log('Divisi data successfully seeded!');
-    
+    console.log('✅ Divisi data successfully seeded!');
+
     // Insert wawancara data
-    for(const wawancara of wawancaraData){
+    for (const wawancara of wawancaraData) {
       const wawancaraBaru = new Wawancara(wawancara);
       await wawancaraBaru.save();
     }
-    console.log('Wawancara data successfully seeded!');
-    
-    // Disconnect from MongoDB
+    console.log('✅ Wawancara data successfully seeded!');
+
     await mongoose.disconnect();
+    console.log("Disconnected from MongoDB");
   } catch (err) {
-    console.error('Error seeding data:', err);
+    console.error('❌ Error seeding data:', err);
   }
 };
 
-// Run the seed function
 seedDivisi();

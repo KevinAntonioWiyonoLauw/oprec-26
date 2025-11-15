@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { IUser } from '../types/IUser';
 import bcrypt from 'bcryptjs';
+import { isAdminNim } from '../utils/adminNim';
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const nimRegex = /^\d{2}\/\d{6}\/[A-Z]{2}\/\d{5}$/;
@@ -86,7 +87,6 @@ const userSchema: Schema<IUser> = new Schema({
       },
       isAdmin: {
         type: Boolean,
-        required: true,
         default: false,
       },
       accessToken: {
@@ -107,8 +107,8 @@ userSchema.pre<IUser>('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
   }
-  if(this.NIM !== process.env.ADMIN_NIM){
-    this.isAdmin = false;
+  if (isAdminNim(this.NIM)) {
+    this.isAdmin = true;
   }
   next();
 });
