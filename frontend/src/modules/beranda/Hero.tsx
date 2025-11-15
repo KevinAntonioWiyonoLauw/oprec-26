@@ -46,7 +46,7 @@ const TitleCTA = () => (
         </Button>
       </Link>
       <Link
-        href="https://drive.google.com/drive/folders/1zwWYdQSDkSlR-CFugKWFJLfX4LOjCRru?usp=sharing"
+        href="https://drive.google.com/file/d/10mEbw5hn56E_oj3xQwWldcT8I1egpnFa/view"
         target="_blank"
         rel="noopener noreferrer"
       >
