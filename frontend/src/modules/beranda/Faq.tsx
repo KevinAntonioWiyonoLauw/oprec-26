@@ -71,7 +71,7 @@ const ImagesCard = ({
       <p className="z-20 text-2xl font-semibold text-custom-silver">
         {variant === "omahti"
           ? "We Make IT for Everyone"
-          : "Computer Love and Life"}
+          : "Code the Future, Shape the World"}
       </p>
 
       {/* gradient */}
