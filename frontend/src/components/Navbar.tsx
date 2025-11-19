@@ -104,7 +104,7 @@ const NavbarSidebar = ({ className }: { className?: string }) => {
                   </div>
                   Open Recruitment
                   <br />
-                  Makomti 2025
+                  Makomti 2026
                 </SheetTitle>
               </SheetHeader>
             </div>
