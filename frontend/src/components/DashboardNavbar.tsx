@@ -75,7 +75,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({ admin = false }) => {
 
 const Help = () => (
   <Link
-    href="https://wa.me/6289603375791"
+    href="https://wa.me/6285866001599"
     target="_blank"
     rel="noopener noreferrer"
     className="flex aspect-square shrink-0 items-center justify-center gap-4 rounded-md bg-custom-gray px-2 py-3 text-white hover:bg-custom-gray/90"
