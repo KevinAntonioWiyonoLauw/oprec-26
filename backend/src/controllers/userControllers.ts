@@ -245,28 +245,54 @@ export const getDivisi = async(req: IGetRequestWithUser, res: Response): Promise
 export const requestPasswordReset = async (req: Request, res: Response) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email });
 
-        if (!user){
-            res.status(404).json({message: "No user with that email exists"});
+        if (!email) {
+            res.status(400).json({ message: "Email is required" });
             return;
         }
 
-        const resetToken = randomBytes(20).toString('hex');
-        const resetTokenExpires = Date.now() + 3600000;
+        const user = await User.findOne({ email });
 
-        const resetUrl = `${req.protocol}://${process.env.FRONTEND_URL}/forgot-password/${resetToken}`;
-        await resetEmail(user.email, resetUrl);
+        if (!user) {
+            res.status(200).json({ 
+                message: "If an account with that email exists, a password reset link has been sent." 
+            });
+            return;
+        }
 
-        await User.updateOne({ _id: user.id }, { // Gunakan user.id
-            resetToken,
-            resetTokenExpiration: resetTokenExpires
+        const resetToken = randomBytes(32).toString('hex');
+        const resetTokenExpires = new Date(Date.now() + 3600000); 
+
+        user.resetToken = resetToken;
+        user.resetTokenExpiration = resetTokenExpires.toISOString();
+        await user.save();
+        const resetUrl = `${process.env.FRONTEND_COMPLETE_URL}/forgot-password/${resetToken}`;
+
+        try {
+            await resetEmail(user.email, resetUrl);
+        } catch (emailError) {
+            console.error("Email sending error:", emailError);
+
+            user.resetToken = undefined;
+            user.resetTokenExpiration = undefined;
+            await user.save();
+
+            res.status(500).json({ 
+                message: "Failed to send password reset email. Please try again later." 
+            });
+            return;
+        }
+
+        res.status(200).json({ 
+            message: "Password reset email sent successfully. Please check your inbox." 
         });
-
-        res.status(200).json({ message: 'Password reset email sent' });
         return;
+
     } catch (error) {
-        res.status(500).json({ message: 'Error sending password reset email' });
+        console.error("requestPasswordReset error:", error);
+        res.status(500).json({ 
+            message: "An error occurred while processing your request. Please try again later." 
+        });
         return;
     }
 };

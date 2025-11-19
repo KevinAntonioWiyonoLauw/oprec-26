@@ -10,6 +10,7 @@
     "seed": "ts-node seed/seed.ts",
     "seedW": "ts-node seed/seedWawancara.ts",
     "seedA": "ts-node seed/seedAdmin.ts",
+    "seedM": "ts-node seed/seedMahasiswa.ts",
     "lint": "eslint src/*/.ts",
     "format": "prettier --write 'src/*/.ts'",
     "type-check": "tsc --noEmit"

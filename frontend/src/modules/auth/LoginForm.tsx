@@ -45,17 +45,25 @@ const LoginForm = () => {
     try {
       setLoadingReset(true);
       setResetMessage(null);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/request-password-reset`, {
+      setError(null);
+      
+      const response = await fetch("/api/auth/request-password-reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      if (!response.ok) throw new Error("Failed to send password reset email.");
-      setLoadingReset(false);
-      setResetMessage("A password reset email has been sent to your email address.");
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send password reset email.");
+      }
+
+      setResetMessage(data.message || "A password reset email has been sent to your email address.");
     } catch (err: any) {
-      setLoadingReset(false);
       setError(err.message || "Failed to send reset email");
+    } finally {
+      setLoadingReset(false);
     }
   };
 

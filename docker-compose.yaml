@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_data:/data/db
+    # Contoh URI lengkap (untuk dipakai di backend, Postman, dll):
+    # mongodb://root:example@localhost:27017/admin?authSource=admin&retryWrites=true&w=majority
+    # Jika nanti ada service backend, bisa ditambah:
+    # networks:
+    #   - backend
+
+volumes:
+  mongo_data:
+
+# networks:
+#   backend:
+#     driver: bridge

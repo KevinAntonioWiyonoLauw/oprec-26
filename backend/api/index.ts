@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import app from '../src/index';
 
 // Export the Express app directly
