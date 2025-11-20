@@ -9,26 +9,21 @@ const seedWawancara = async () => {
     await mongoose.connect(`${process.env.MONGODB_URI}`, {serverSelectionTimeoutMS: 20000});
     console.log("Connected to MongoDB");
 
-    // Divisi slots structure with quota 2 per division
-    const divisiSlotsOti = {
-      'backend': { current: 0, max: 2 },
-      'frontend': { current: 0, max: 2 },
-      'uiux': { current: 0, max: 2 },
-      'dsai': { current: 0, max: 2 },
-      'mobapps': { current: 0, max: 2 },
-      'gamedev': { current: 0, max: 2 },
-      'compro': { current: 0, max: 2 },
-      'cybersec': { current: 0, max: 2 },
-    };
+    // Divisi list sesuai model
+    const divisiOti = [
+      'backend', 'frontend', 'uiux', 'dsai', 'mobapps', 'gamedev', 'cybersec', 'cp'
+    ];
+    const divisiHimakom = [
+      'hr', 'media', 'pr', 'treasurer', 'secretary', 'skilldev', 'snf', 'ipc'
+    ];
 
-    const divisiSlotsHimakom = {
-      'hr': { current: 0, max: 2 },
-      'media': { current: 0, max: 2 },
-      'pr': { current: 0, max: 2 },
-      'sekbend': { current: 0, max: 2 },
-      'skilldev': { current: 0, max: 2 },
-      'snf': { current: 0, max: 2 },
-      'ipc': { current: 0, max: 2 },
+    // Helper untuk slotDivisi per sesi
+    const makeSlotDivisi = (divisiList: string[]) => {
+      const obj: any = {};
+      for (const div of divisiList) {
+        obj[div] = { sisaSlot: 2, lokasi: '-' }; // ubah dari '' ke '-'
+      }
+      return obj;
     };
 
     const wawancaraData = [];
@@ -47,10 +42,10 @@ const seedWawancara = async () => {
 
     for (let day = 23; day <= 24; day++) {
       const sesiSiang = siangTimes.map(time => ({
-        jam: new Date(2025, 10, day, time.h, time.m), // November = month 10 (0-indexed)
+        jam: new Date(2025, 10, day, time.h, time.m),
         dipilihOleh: [],
-        slotTotal: { current: 0, max: 6 }, // Total 6 per batch
-        slotDivisi: JSON.parse(JSON.stringify(divisiSlotsHimakom)),
+        slotTotal: { current: 0, max: 6 },
+        slotDivisi: makeSlotDivisi(divisiHimakom),
       }));
 
       wawancaraData.push({
@@ -73,7 +68,7 @@ const seedWawancara = async () => {
         jam: new Date(2025, 10, day, time.h, time.m),
         dipilihOleh: [],
         slotTotal: { current: 0, max: 6 },
-        slotDivisi: JSON.parse(JSON.stringify(divisiSlotsOti)),
+        slotDivisi: makeSlotDivisi(divisiOti),
       }));
 
       wawancaraData.push({

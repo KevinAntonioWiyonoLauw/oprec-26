@@ -6,6 +6,7 @@ import { IDivisi } from "../types/IDivisi";
 import { IUser } from "../types/IUser";
 import { generateTokens, setCookies } from "../utils/jwt";
 import { COOKIE_CONFIG } from "../config/jwtcookies";
+import mongoose from "mongoose";
 //
 const MAX_DIVISIONS_PER_TYPE = 2;
 
@@ -24,33 +25,56 @@ export const pilihDivisi = async (req: IGetRequestWithUser, res: Response): Prom
             throw new DivisionSelectionError("Unauthorized", 401);
         }
 
-        // Fetch necessary data
-        const [divisi, user] = await Promise.all([
+        // Ambil user + divisi (divisi belum diupdate slot-nya di sini)
+        const [divisiRaw, user] = await Promise.all([
             Divisi.findOne({ slug: divisiSlug }),
-            User.findById(req.user.userId).populate("divisiPilihanOti").populate("divisiPilihanHima")
+            User.findById(req.user.userId)
+                .populate("divisiPilihanOti")
+                .populate("divisiPilihanHima")
         ]);
-        
-        // Validate existence
-        if (!divisi || !user) {
+
+        if (!divisiRaw || !user) {
             throw new DivisionSelectionError("Division or user not found");
         }
-        
-        // Validate division availability
-        if ((divisi.dipilihOleh?.length || 0) >= divisi.slot) {
-            throw new DivisionSelectionError("Slot sudah habis");
-        }
 
-        if (divisi.dipilihOleh?.includes(req.user.userId)) {
+        const userId = user._id as mongoose.Types.ObjectId;
+
+        // Cek apakah user sudah pernah pilih divisi ini
+        if (divisiRaw.dipilihOleh?.some((id: any) => id.toString() === userId.toString())) {
             throw new DivisionSelectionError("User sudah terdaftar di divisi ini");
         }
 
-        // Handle division selection
-        await handleDivisionSelection(user, divisi, urutanPrioritas);
+        // Handle logika pilihan di sisi user (tidak menyentuh divisi)
+        await handleDivisionSelection(user, divisiRaw, urutanPrioritas);
 
-        // Update division slots
-        divisi.dipilihOleh = [...(divisi.dipilihOleh || []), req.user.userId];
-        
-        // Generate new tokens
+        /**
+         * STEP 1: Klaim slot divisi secara atomic
+         * - pastikan:
+         *   - slot belum penuh
+         *   - user belum ada di dipilihOleh
+         */
+        const updatedDivisi = await Divisi.findOneAndUpdate(
+            {
+                _id: divisiRaw._id,
+                // slot belum penuh
+                $expr: { $lt: [{ $size: { $ifNull: ["$dipilihOleh", []] } }, "$slot"] },
+                // user belum terdaftar
+                dipilihOleh: { $ne: userId }
+            },
+            {
+                $addToSet: { dipilihOleh: userId }
+            },
+            { new: true }
+        );
+
+        if (!updatedDivisi) {
+            // Kalau sampai sini berarti:
+            // - slot mendadak penuh, atau
+            // - user tiba-tiba sudah masuk (race condition)
+            throw new DivisionSelectionError("Slot sudah habis atau user sudah terdaftar di divisi ini");
+        }
+
+        // STEP 2: generate token berdasarkan user yang sudah dimodif (divisiPilihan, enrolledSlug*)
         const tokens = generateTokens({
             userId: user.id,
             username: user.username,
@@ -59,16 +83,16 @@ export const pilihDivisi = async (req: IGetRequestWithUser, res: Response): Prom
             enrolledSlugHima: user.enrolledSlugHima,
             enrolledSlugOti: user.enrolledSlugOti
         });
-        
-        // Set cookies di response header
+
         setCookies(res, tokens, COOKIE_CONFIG);
-        
-        // Save to database
+
+        // STEP 3: simpan user
         user.accessToken = tokens.accessToken;
         user.refreshToken = tokens.refreshToken;
-        await Promise.all([user.save(), divisi.save()]);
 
-        res.status(200).json({ 
+        await user.save(); // kalau ini gagal, divisi sudah terupdate; tanpa transaksi memang tidak bisa 100% atomic
+
+        res.status(200).json({
             message: "Berhasil mendaftar ke divisi ini",
             user: {
                 enrolledSlugHima: user.enrolledSlugHima,
@@ -83,6 +107,7 @@ export const pilihDivisi = async (req: IGetRequestWithUser, res: Response): Prom
         return;
     }
 };
+
 
 async function handleDivisionSelection(
     user: IUser,
