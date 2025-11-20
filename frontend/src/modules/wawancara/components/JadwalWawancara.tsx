@@ -24,7 +24,7 @@ type DivisionType =
   | "cp"
   | "mobapps"
   | "gamedev"
-  | "cysec"
+  | "cybersec"
   | "ipc"
   | "media"
   | "pr"
@@ -58,7 +58,7 @@ interface JadwalWawancaraProps {
         cp: { sisaSlot: number; lokasi: string };
         mobapps: { sisaSlot: number; lokasi: string };
         gamedev: { sisaSlot: number; lokasi: string };
-        cysec: { sisaSlot: number; lokasi: string };
+        cybersec: { sisaSlot: number; lokasi: string };
         ipc: { sisaSlot: number; lokasi: string };
         media: { sisaSlot: number; lokasi: string };
         pr: { sisaSlot: number; lokasi: string };

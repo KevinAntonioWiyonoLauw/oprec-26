@@ -15,7 +15,7 @@ export interface ISlotDivisiPerSesi extends Document{
     cp: IDivisiSlot,
     mobapps: IDivisiSlot,
     gamedev: IDivisiSlot,
-    cysec: IDivisiSlot,
+    cybersec: IDivisiSlot,
     hr: IDivisiSlot,
     treasurer: IDivisiSlot,
     secretary: IDivisiSlot,

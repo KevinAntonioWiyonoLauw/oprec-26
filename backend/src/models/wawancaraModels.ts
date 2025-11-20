@@ -18,7 +18,7 @@ const slotDivisiPerSesiSchema = new Schema(
     cp: divisiSlotSchema,
     mobapps: divisiSlotSchema,
     gamedev: divisiSlotSchema,
-    cysec: divisiSlotSchema,
+    cybersec: divisiSlotSchema,
     hr: divisiSlotSchema,
     treasurer: divisiSlotSchema,
     secretary: divisiSlotSchema,

@@ -277,7 +277,7 @@ export const divisi = [
   },
   {
     makomti: "omahti",
-    id: "cysec",
+    id: "cybersec",
     nama: "Cyber Security",
     logoUrl: "",
     tentang: "",
