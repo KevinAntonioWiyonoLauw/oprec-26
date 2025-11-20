@@ -31,7 +31,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat RESTful API dengan fitur authentication (register/login), CRUD operations, dan middleware validation. Implementasikan error handling yang proper.',
           toolsPenugasan: 'Node.js, Express.js, MongoDB/PostgreSQL, Postman',
           linkPenugasan: 'https://drive.google.com/drive/folders/1PseOqiZ289uhwKGy6OKQKmoOIRxJCApZ?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -54,7 +54,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat web application responsive dengan minimal 3 halaman, state management, dan integrasi API. Implementasikan smooth navigation dan UX yang baik.',
           toolsPenugasan: 'React.js/Next.js/Vue.js, Tailwind CSS, JavaScript/TypeScript',
           linkPenugasan: 'https://drive.google.com/drive/folders/1D5v3b4GIAi-jWrj6F1ZBRgLUVyEqzL_D?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -77,7 +77,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Rancang UI/UX untuk mobile app atau website lengkap dengan user flow, wireframe, dan high-fidelity prototype. Perhatikan usability dan visual hierarchy.',
           toolsPenugasan: 'Figma, Adobe XD, Prototyping Tools',
           linkPenugasan: 'https://drive.google.com/drive/folders/1XH4Sd370Vns9kTrXScfVYyuaRN27TliW?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -100,7 +100,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat project data analysis atau ML model. Harus mencakup data preprocessing, EDA, modeling, dan evaluation dengan visualisasi yang informatif.',
           toolsPenugasan: 'Python, Jupyter Notebook, pandas, numpy, scikit-learn, matplotlib',
           linkPenugasan: 'https://drive.google.com/drive/folders/1iGngRXcxFzXDZryETsoEIiHHSIJWChJZ?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -123,7 +123,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Selesaikan problem solving yang mencakup algoritma seperti sorting, dynamic programming, graph theory. Solusi harus efisien dalam time dan space complexity.',
           toolsPenugasan: 'C++, Python, Java, Online Judge (Codeforces, LeetCode)',
           linkPenugasan: 'https://drive.google.com/drive/folders/1XH4Sd370Vns9kTrXScfVYyuaRN27TliW?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -161,7 +161,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat mobile app dengan minimal 3 screens, navigation, state management, dan API integration. Aplikasi harus responsive dan mengikuti design guidelines platform.',
           toolsPenugasan: 'Flutter, React Native, Kotlin, Swift, Android Studio',
           linkPenugasan: 'https://drive.google.com/drive/folders/1O_3GDFEI5eJ7G-C-j-kDeH4If-4W3SaW?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -184,7 +184,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat game prototype (2D/3D) dengan gameplay mechanics yang clear, controls responsive, dan visual/audio yang mendukung. Minimal 1 level yang playable.',
           toolsPenugasan: 'Unity, Unreal Engine, C#, C++, Blender (optional)',
           linkPenugasan: 'https://drive.google.com/drive/folders/1Qlvqc5uIOu3tNXFxG_QyvCxk78GNSF9r?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -207,7 +207,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Selesaikan CTF challenges (web exploitation, cryptography, forensics) atau buat security analysis report dari sebuah sistem dengan recommendations.',
           toolsPenugasan: 'Kali Linux, Metasploit, Wireshark, Burp Suite, Python',
           linkPenugasan: 'https://drive.google.com/drive/folders/18L0nkSok6hV-V4zSU71w9uRSIS8yH7_L?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       
@@ -247,7 +247,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat sistem pencatatan keuangan atau laporan keuangan untuk event lengkap dengan pemasukan, pengeluaran, dan analisis budget yang detail dan realistis.',
           toolsPenugasan: 'Microsoft Excel, Google Sheets, Notion',
           linkPenugasan: 'https://drive.google.com/drive/folders/1HqUCb7OqFfcmWUKrgnApkYE-bSN2yxHA?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -285,7 +285,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat sistem dokumentasi atau notulensi rapat yang terstruktur. Atau buat proposal/surat resmi dengan format yang proper dan bahasa yang formal.',
           toolsPenugasan: 'Microsoft Word, Google Docs, Notion, Canva',
           linkPenugasan: 'https://drive.google.com/drive/folders/1GCtX9LP50JaVH6JfKx8xauYHSy9MJHKD?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -308,7 +308,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat proposal program training/workshop atau rancang sistem evaluation untuk SDM. Atau buat rundown acara team building yang engaging dan educational.',
           toolsPenugasan: 'Microsoft Office, Google Workspace, Canva, Notion',
           linkPenugasan: 'https://drive.google.com/drive/folders/1B-Ro944FNcbDnqolVY_MHKpbo3RyySq-?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -331,7 +331,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat sistem monitoring/evaluasi kinerja divisi atau proposal audit internal. Atau analisis permasalahan organisasi dengan solusi yang konstruktif.',
           toolsPenugasan: 'Microsoft Office, Google Forms, Data Analysis Tools',
           linkPenugasan: 'https://drive.google.com/drive/folders/1Lj1NMWCev0xf7iUzS7_Xd3JRXajmENzc?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -354,7 +354,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat proposal sponsorship yang menarik untuk sebuah event atau strategi fundraising yang kreatif. Harus mencakup benefits package dan target sponsor yang clear.',
           toolsPenugasan: 'Microsoft Office, Canva, Presentation Skills',
           linkPenugasan: 'https://drive.google.com/drive/folders/19TEN1JMwYhKOJpvNbQGVjT5BtGgOSc4x?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -377,7 +377,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat proposal workshop/bootcamp lengkap dengan materi, timeline, dan target peserta. Atau rancang curriculum training program yang komprehensif dan applicable.',
           toolsPenugasan: 'Microsoft Office, Canva, Learning Management Systems',
           linkPenugasan: 'https://drive.google.com/drive/folders/1_cWIbTFnhb-0TBLyGehmJBHanHaGzlm8?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -400,7 +400,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: 'Buat konten visual untuk social media campaign atau design poster/banner untuk event. Atau buat video documentation/promotional dengan editing yang menarik.',
           toolsPenugasan: 'Adobe Photoshop, Illustrator, Premiere Pro, Canva, CapCut',
           linkPenugasan: 'https://drive.google.com/drive/folders/1WBnWOBrpM0HUd7wXpse6DIWlUbVzMyaR?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
       {
@@ -423,7 +423,7 @@ const seedDivisi = async () => {
           deskripsiPenugasan: '1) Copywriting: Buat copywriting berdasarkan berita terbaru HIMAKOM/non-HIMAKOM dengan outline/storyboard konten Instagram (format PDF).<br><br>2) Wawancara: Lakukan wawancara 3-5 menit tentang topik PR (teknologi, sosial media, komunikasi) dengan narasumber di tempat wisata strategis Yogyakarta, rekam dalam video portrait (format video).',
           toolsPenugasan: 'Microsoft Office, Canva, Social Media Management Tools, Video Recording',
           linkPenugasan: 'https://drive.google.com/drive/folders/1ydgJ_EevD8EzhC_O-aGaU_5pBS89WK8m?ths=true',
-          deadline: new Date(2025, 10, 21, 12, 0),
+          deadline: new Date(2025, 10, 22, 0, 0),
         },
       },
     ];

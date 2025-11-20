@@ -10,6 +10,6 @@ export const WAWANCARA_SCHEDULE = {
 } as const;
 
 export const DEADLINE = {
-  date: "2025-11-21",
-  time: "12:00"
+  date: "2025-11-22",
+  time: "00:00"
 } as const;
