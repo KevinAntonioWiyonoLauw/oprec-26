@@ -59,7 +59,7 @@ async function handleWawancaraSelection(
     }
 
     const userDivisions = user.divisiPilihan
-      .filter(dp => dp.divisiId.himakom === isHimakom)
+      .filter(dp => dp.divisiId && dp.divisiId.himakom === isHimakom)
       .map(dp => dp.divisiId.slug);
 
     if (userDivisions.length === 0) {
