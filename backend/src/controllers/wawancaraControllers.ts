@@ -9,12 +9,28 @@ interface DIVISISLOT {
   [key: string]: IDivisiSlot;
 }
 
+// Deadline pemilihan jadwal wawancara: 23 November 2025, 00:00 WIB (midnight)
+const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2025, 10, 22, 17, 0, 0)); // 23 Nov 2025, 00:00 WIB
+
 async function handleWawancaraSelection(
   req: IGetRequestWithUser,
   res: Response,
   isHimakom: boolean
 ): Promise<void> {
   try {
+    // Check if selection period has closed
+    const now = new Date();
+    if (now > WAWANCARA_SELECTION_DEADLINE) {
+      res.status(403).json({ 
+        message: `Pemilihan jadwal wawancara sudah ditutup pada ${WAWANCARA_SELECTION_DEADLINE.toLocaleString('id-ID', { 
+          dateStyle: 'long', 
+          timeStyle: 'short',
+          timeZone: 'Asia/Jakarta'
+        })}`
+      });
+      return;
+    }
+
     if (!req.user) {
       res.status(401).json({ message: "Unauthorized" });
       return;
