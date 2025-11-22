@@ -69,6 +69,11 @@ async function handleWawancaraSelection(
       return;
     }
 
+    // Mapping untuk mengatasi perbedaan nama slug
+    const slugMapping: { [key: string]: string } = {
+      'cybersec': 'cysec'
+    };
+
     const conflictWrapper = user[tanggalConflict] as
       | { tanggalId?: IWawancara; jam?: Date }
       | undefined;
@@ -131,12 +136,15 @@ async function handleWawancaraSelection(
     const divisionsWithNoSlot: string[] = [];
 
     for (const divSlug of userDivisions) {
-      if (!(divSlug in slotDivisi)) {
+      // Gunakan mapping jika ada
+      const mappedSlug = slugMapping[divSlug] || divSlug;
+      
+      if (!(mappedSlug in slotDivisi)) {
         unavailableDivisions.push(divSlug);
         continue;
       }
 
-      const current = slotDivisi[divSlug];
+      const current = slotDivisi[mappedSlug];
       if (!current || current.sisaSlot === undefined || current.sisaSlot <= 0) {
         divisionsWithNoSlot.push(divSlug);
       }
@@ -159,7 +167,9 @@ async function handleWawancaraSelection(
     const updatedDivisions: Array<{ slug: string; sisaSlot: number; lokasi: string }> = [];
     
     for (const divSlug of userDivisions) {
-      const current = slotDivisi[divSlug];
+      // Gunakan mapping jika ada
+      const mappedSlug = slugMapping[divSlug] || divSlug;
+      const current = slotDivisi[mappedSlug];
       
       if (!current || current.sisaSlot === undefined) {
         res.status(400).json({ 
