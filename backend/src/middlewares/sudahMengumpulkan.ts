@@ -1,8 +1,8 @@
 import { IGetRequestWithUser } from "../types/getUserRequest";
 import { Response, NextFunction } from "express";
 import User from "../models/userModels";
-import Divisi from "../models/divisiModels";
 import Penugasan from "../models/penugasanModels";
+import "../models/divisiModels"; // Import to register schema for populate
 
 export const sudahMengumpulkanOti = async(
     req: IGetRequestWithUser, 
@@ -17,29 +17,32 @@ export const sudahMengumpulkanOti = async(
             return;
         }
 
-        const user = await User.findById(userId).populate("prioritasOti");
+        const user = await User.findById(userId).populate("divisiPilihan.divisiId");
         
-        if (!user?.prioritasOti) {
-            res.status(400).json({ message: "Belum memilih divisi OTI" });
+        if (!user?.divisiPilihan || user.divisiPilihan.length === 0) {
+            res.status(400).json({ message: "Belum memilih divisi OmahTI" });
             return;
         }
 
-        const divisiOti = await Divisi.findById(user.prioritasOti);
-        
-        if (!divisiOti) {
-            res.status(400).json({ message: "Divisi OTI tidak ditemukan" });
+        // Get all OmahTI divisions the user has chosen
+        const divisiOtiIds = user.divisiPilihan
+            .filter((dp: any) => dp.divisiId && dp.divisiId.himakom === false)
+            .map((dp: any) => dp.divisiId._id);
+
+        if (divisiOtiIds.length === 0) {
+            res.status(400).json({ message: "Belum memilih divisi OmahTI" });
             return;
         }
 
-        // Check if user has submitted assignment for OTI division
+        // Check if user has submitted assignment for ANY OmahTI division
         const penugasan = await Penugasan.findOne({
             disubmitOleh: userId,
-            disubmitDi: divisiOti._id
+            disubmitDi: { $in: divisiOtiIds }
         });
 
         if (!penugasan) {
             res.status(403).json({ 
-                message: "Kamu harus mengumpulkan tugas divisi OTI terlebih dahulu sebelum bisa memilih jadwal wawancara" 
+                message: "Kamu harus mengumpulkan tugas untuk minimal 1 divisi OmahTI terlebih dahulu sebelum bisa memilih jadwal wawancara" 
             });
             return;
         }
@@ -64,29 +67,32 @@ export const sudahMengumpulkanHima = async(
             return;
         }
 
-        const user = await User.findById(userId).populate("prioritasHima");
+        const user = await User.findById(userId).populate("divisiPilihan.divisiId");
         
-        if (!user?.prioritasHima) {
+        if (!user?.divisiPilihan || user.divisiPilihan.length === 0) {
             res.status(400).json({ message: "Belum memilih divisi HIMAKOM" });
             return;
         }
 
-        const divisiHima = await Divisi.findById(user.prioritasHima);
-        
-        if (!divisiHima) {
-            res.status(400).json({ message: "Divisi HIMAKOM tidak ditemukan" });
+        // Get all HIMAKOM divisions the user has chosen
+        const divisiHimaIds = user.divisiPilihan
+            .filter((dp: any) => dp.divisiId && dp.divisiId.himakom === true)
+            .map((dp: any) => dp.divisiId._id);
+
+        if (divisiHimaIds.length === 0) {
+            res.status(400).json({ message: "Belum memilih divisi HIMAKOM" });
             return;
         }
 
-        // Check if user has submitted assignment for HIMAKOM division
+        // Check if user has submitted assignment for ANY HIMAKOM division
         const penugasan = await Penugasan.findOne({
             disubmitOleh: userId,
-            disubmitDi: divisiHima._id
+            disubmitDi: { $in: divisiHimaIds }
         });
 
         if (!penugasan) {
             res.status(403).json({ 
-                message: "Kamu harus mengumpulkan tugas divisi HIMAKOM terlebih dahulu sebelum bisa memilih jadwal wawancara" 
+                message: "Kamu harus mengumpulkan tugas untuk minimal 1 divisi HIMAKOM terlebih dahulu sebelum bisa memilih jadwal wawancara" 
             });
             return;
         }
