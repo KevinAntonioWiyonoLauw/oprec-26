@@ -9,8 +9,8 @@ interface DIVISISLOT {
   [key: string]: IDivisiSlot;
 }
 
-// Deadline pemilihan jadwal wawancara: 23 November 2025, 00:00 WIB (midnight)
-const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2025, 10, 22, 17, 0, 0)); // 23 Nov 2025, 00:00 WIB
+// Deadline pemilihan jadwal wawancara: 25 November 2025, 00:00 WIB (midnight)
+const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2025, 10, 26, 17, 0, 0)); // 25 Nov 2025, 00:00 WIB
 
 async function handleWawancaraSelection(
   req: IGetRequestWithUser,
