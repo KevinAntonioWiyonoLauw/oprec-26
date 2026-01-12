@@ -22,11 +22,11 @@ const Faq = () => {
 
       {/* images row */}
       <div className="w-full gap-8 space-y-3 lg:flex lg:items-start lg:justify-start lg:gap-3 lg:space-y-0">
-        <div className="flex flex-col gap-3 lg:w-1/2">
+        {/* <div className="flex flex-col gap-3 lg:w-1/2">
           <ImagesCard variant="omahti" />
-        </div>
+        </div> */}
 
-        <div className="flex flex-col gap-3 lg:w-1/2">
+        <div className="flex flex-col gap-3 lg:w-full">
           <ImagesCard variant="himakom" />
         </div>
       </div>
