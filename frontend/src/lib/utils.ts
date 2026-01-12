@@ -14,26 +14,26 @@ export const MAX_ENROLLMENTS = 4;
 export const LINIMASA_DETAIL = [
   {
     title: "Pilih Divisi",
-    date: "15 Nov - 21 Nov",
+    date: "14 Jan - 21 Jan",
     description:
-      "Memilih 2 divisi Himakom (Opsional) dan 2 divisi OmahTI (Opsional)",
+      "Memilih 2 divisi Himakom",
   },
   {
     title: "Penugasan",
-    date: "15 Nov - 21 Nov",
+    date: "14 Jan - 21 Jan",
     description: "Melakukan penugasan sesuai divisi",
   },
   {
     title: "Wawancara",
-    date: "23 Nov - 28 Nov",
+    date: "22 Jan - 26 Jan",
     description:
-      "Wawancara Himakom dan OmahTI sesuai divisi dan waktu yang telah dipilih",
+      "Wawancara Himakom sesuai divisi dan waktu yang telah dipilih",
   },
 
   {
     title: "Pengumuman",
-    date: "22 Dec",
-    description: "Hasil Pengumuman OmahTI dan Himakom",
+    date: "30 Jan",
+    description: "Hasil Pengumuman Himakom",
   },
 ];
 // --------------------------------------------------------------------
