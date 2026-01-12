@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Oprec Makomti",
-  description: "Open Recruitment Himakom & OmahTI",
+  description: "Open Recruitment Himakom",
 };
 
 const poppins = Poppins({

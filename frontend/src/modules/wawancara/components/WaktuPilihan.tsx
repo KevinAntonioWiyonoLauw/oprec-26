@@ -7,7 +7,7 @@ const WaktuPilihan = ({
   slugOti,
   slugHima,
 }: any) => {
-  const isEmpty = !filteredHima && !filteredOti;
+  const isEmpty = !filteredHima; // && !filteredOti;
   
   const formatDate = (isoString: Date) => {
     const date = new Date(isoString);
@@ -41,14 +41,14 @@ const WaktuPilihan = ({
           <p>Kamu belum memilih waktu wawancara, pilih waktu yang tersedia 😁</p>
         ) : (
           <>
-            {filteredOti && (
+            {/* {filteredOti && (
               <Card
                 variant="omahti"
                 tanggal={formatDate(filteredOti.tanggal)}
                 jam={formatTime(filteredOti.sesi[0].jam)}
                 lokasi={filteredOti.sesi[0].slotDivisi[slugOti]?.lokasi}
               />
-            )}
+            )} */}
             {filteredHima && (
               <Card
                 variant="himakom"

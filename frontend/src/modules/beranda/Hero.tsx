@@ -64,7 +64,7 @@ const TitleCTA = () => (
 
 const Logos = () => (
   <div className="z-20 flex items-center gap-4">
-    <Image src={omahti} alt="OmahTI Logo" className="h-8 w-auto" priority />
+    {/* <Image src={omahti} alt="OmahTI Logo" className="h-8 w-auto" priority /> */}
     <Image src={himakom} alt="Himakom Logo" className="h-8 w-auto" priority />
   </div>
 );
@@ -75,16 +75,16 @@ const Background = () => (
     <div className="absolute inset-0 overflow-hidden">
       {/* image layer */}
       <div className="relative h-[600px] w-full xxs:h-[620px] xs:h-[680px] sm:h-[750px] md:h-[800px]">
-        <Image
+        {/* <Image
           className="absolute -right-[2rem] top-4 z-10 h-[80vh] w-full min-w-[500px] object-contain xxs:right-[2.7rem] xs:right-[9rem] xs:translate-y-12 md:right-[10rem] md:top-0 lg:right-[10rem]"
           src={omahtiModel}
           width={503}
           height={906}
           alt=""
           priority
-        />
+        /> */}
         <Image
-          className="absolute -left-[2rem] top-4 z-10 h-[90vh] w-full min-w-[500px] object-contain p-8 xxs:left-[2.7rem] xs:left-[9rem] xs:translate-y-[2.5rem] md:left-[9rem] lg:left-[9rem]"
+          className="absolute left-1/2 -translate-x-1/2 top-4 z-10 h-[90vh] w-full min-w-[500px] object-contain p-8 xs:translate-y-[2.5rem]"
           src={himakomModel}
           width={500}
           height={906}
@@ -95,8 +95,8 @@ const Background = () => (
       {/* circle in the background */}
       <div className="absolute bottom-[-10rem] left-1/2 z-0 aspect-square w-full max-w-2xl -translate-x-1/2 rounded-full bg-custom-gray sm:bottom-[-12rem] md:bottom-[-13rem] lg:bottom-[-14rem]" />
       {/* gradients */}
-      <div className="absolute bottom-0 left-1/2 z-10 h-[85%] w-full bg-gradient-to-t from-custom-blue/100 via-custom-blue/20 to-transparent opacity-100 blur-2xl" />
-      <div className="absolute bottom-0 right-1/2 z-10 h-[85%] w-full bg-gradient-to-t from-custom-orange/100 via-custom-orange/20 to-transparent opacity-100 blur-2xl" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 h-[85%] w-full bg-gradient-to-t from-custom-blue/100 via-custom-blue/20 to-transparent opacity-100 blur-2xl" />
+      {/* <div className="absolute bottom-0 right-1/2 z-10 h-[85%] w-full bg-gradient-to-t from-custom-orange/100 via-custom-orange/20 to-transparent opacity-100 blur-2xl" /> */}
       {/* mask layer to stop gradient overflow
       <div className="relative bottom-0 left-0 z-20 h-[45px] w-full bg-custom-black sm:h-[55px]" /> */}
     </div>

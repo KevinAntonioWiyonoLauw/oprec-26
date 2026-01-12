@@ -9,7 +9,7 @@ interface PageProps {
 export async function generateStaticParams() {
   return [
     { makomti: "himakom" },
-    { makomti: "omahti" },
+    // { makomti: "omahti" }, // Disabled for now
   ];
 }
 
