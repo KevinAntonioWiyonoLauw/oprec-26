@@ -7,8 +7,8 @@ import { formatDate } from "@/lib/utils";
 const Pengumuman = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const { diterimaDi } = await getPenerimaanUser(accessToken as string);
-  // Set your announcement release date here - 30 January 2026, 00:01 WIB
-  const releaseDate = new Date("2026-01-30T00:01:00+07:00"); // 30 January 2026, 00:01 WIB
+  // Set your announcement release date here - 30 January 2026, 12:00 WIB (noon)
+  const releaseDate = new Date("2026-01-30T12:00:00+07:00"); // 30 January 2026, 12:00 WIB
   const currentDate = new Date();
   console.log(`pengumuman.tsx: releaseDate: ${releaseDate}`);
 
@@ -34,7 +34,11 @@ const Pengumuman = async () => {
         ) : (
           <h1 className="text-center text-xl font-medium">
             Pengumuman belum tersedia. Silakan cek kembali pada tanggal{" "}
-            {releaseDate.toLocaleDateString("id-ID")}.
+            {releaseDate.toLocaleDateString("id-ID", { 
+              day: "numeric", 
+              month: "long", 
+              year: "numeric" 
+            })}.
           </h1>
         )}
       </div>
@@ -65,7 +69,11 @@ const Title = async ({
         <p>
           Kamu dapat membuka hasil pengumuman pada{" "}
           <span className="font-semibold">
-            {formatDate(releaseDate)}
+            {releaseDate.toLocaleDateString("id-ID", { 
+              day: "numeric", 
+              month: "long", 
+              year: "numeric" 
+            })}
           </span>
         </p>
       </section>
