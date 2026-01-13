@@ -10,6 +10,11 @@ import mongoose from "mongoose";
 //
 const MAX_DIVISIONS_PER_TYPE = 2;
 
+// Pemilihan divisi dibuka: 14 Januari 2026, 00:00 WIB (midnight)
+// Pemilihan divisi ditutup: 22 Januari 2026, 00:00 WIB (midnight)
+const DIVISION_SELECTION_OPEN_DATE = new Date(Date.UTC(2026, 0, 13, 17, 0, 0)); // 14 Jan 2026, 00:00 WIB (UTC+7)
+const DIVISION_SELECTION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 21, 17, 0, 0)); // 22 Jan 2026, 00:00 WIB (UTC+7)
+
 class DivisionSelectionError extends Error {
     constructor(message: string, public statusCode: number = 400) {
         super(message);
@@ -18,6 +23,30 @@ class DivisionSelectionError extends Error {
 
 export const pilihDivisi = async (req: IGetRequestWithUser, res: Response): Promise<void> => {
     try {
+        // Check if selection period is open
+        const now = new Date();
+        if (now < DIVISION_SELECTION_OPEN_DATE) {
+            res.status(403).json({ 
+                message: `Pemilihan divisi belum dibuka. Akan dibuka pada ${DIVISION_SELECTION_OPEN_DATE.toLocaleString('id-ID', { 
+                    dateStyle: 'long', 
+                    timeStyle: 'short',
+                    timeZone: 'Asia/Jakarta'
+                })}`
+            });
+            return;
+        }
+        
+        if (now > DIVISION_SELECTION_CLOSE_DATE) {
+            res.status(403).json({ 
+                message: `Pemilihan divisi sudah ditutup pada ${DIVISION_SELECTION_CLOSE_DATE.toLocaleString('id-ID', { 
+                    dateStyle: 'long', 
+                    timeStyle: 'short',
+                    timeZone: 'Asia/Jakarta'
+                })}`
+            });
+            return;
+        }
+
         const { slug: divisiSlug } = req.params;
         const { urutanPrioritas } = req.body;
 
