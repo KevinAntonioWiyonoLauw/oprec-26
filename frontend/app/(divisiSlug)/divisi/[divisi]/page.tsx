@@ -43,6 +43,11 @@ const Page = async ({ params }: DivisiPageProps) => {
     notFound();
   }
 
+  // Block access to OmahTI divisions
+  if (divisiData.himakom === false) {
+    notFound();
+  }
+
   const safeProker = Array.isArray(divisiData.proker)
     ? divisiData.proker.filter((p: any) => p != null)
     : [];
