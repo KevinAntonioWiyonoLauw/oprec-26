@@ -7,8 +7,8 @@ import { formatDate } from "@/lib/utils";
 const Pengumuman = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const { diterimaDi } = await getPenerimaanUser(accessToken as string);
-  // Set your announcement release date here
-  const releaseDate = new Date(Date.UTC(2026, 0, 29, 17, 0, 0)); // 30 January 2026, 00:00 WIB (UTC+7)
+  // Set your announcement release date here - 30 January 2026, 00:00 WIB
+  const releaseDate = new Date("2026-01-30T00:00:00+07:00"); // 30 January 2026, 00:00 WIB
   const currentDate = new Date();
   console.log(`pengumuman.tsx: releaseDate: ${releaseDate}`);
 
