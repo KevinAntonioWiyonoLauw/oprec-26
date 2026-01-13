@@ -431,7 +431,7 @@ export const getUserDiterimaDimana = async (req: IGetRequestWithUser, res: Respo
         return;
     }
     const currentDate = new Date();
-    const releaseDate = new Date(Date.UTC(2026, 0, 29, 17, 0, 0)); // 30 January 2026, 00:00 WIB (UTC+7)
+    const releaseDate = new Date(Date.UTC(2026, 0, 29, 17, 1, 0)); // 30 January 2026, 00:01 WIB (UTC+7)
     try {
         const user = await User.findById(req.user.userId).populate("diterimaDi");
         if(!user) {
