@@ -106,12 +106,13 @@ const PopupUrutan = ({
     setShowErrorModal(false);
   };
 
-  const isPendaftaranBuka = process.env.NEXT_PUBLIC_PENDAFTARAN_STATUS === "true";
+  // Remove hardcoded lock - let backend handle the date check
+  const isPendaftaranBuka = true;
 
   return (
     <>
       <AlertDialog>
-        <AlertDialogTrigger disabled={!isPendaftaranBuka || hasMax || hasEnrolled} asChild>
+        <AlertDialogTrigger disabled={hasMax || hasEnrolled} asChild>
           <Button className="lg:text-md w-full text-sm tracking-wide">
             {hasMax
               ? `Batas pilihan divisi tercapai`

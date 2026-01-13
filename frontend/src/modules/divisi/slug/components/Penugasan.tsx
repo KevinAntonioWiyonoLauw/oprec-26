@@ -115,7 +115,8 @@ const Penugasan = ({
     }
   };
 
-  const isPendaftaranBuka = process.env.NEXT_PUBLIC_PENDAFTARAN_STATUS === "true";
+  // Remove hardcoded lock - let backend handle the date check
+  const isPendaftaranBuka = true;
 
   return (
     <div className="h-auto rounded-lg bg-custom-gray-dark p-4 xl:ml-0 xl:h-full xl:w-[30%]">
