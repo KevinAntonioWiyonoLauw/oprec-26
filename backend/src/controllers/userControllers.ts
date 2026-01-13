@@ -431,7 +431,7 @@ export const getUserDiterimaDimana = async (req: IGetRequestWithUser, res: Respo
         return;
     }
     const currentDate = new Date();
-    const releaseDate = new Date("2025-12-22T03:00:00.000Z"); // 22 December 2025, 10:00 WIB (UTC+7)
+    const releaseDate = new Date(Date.UTC(2026, 0, 29, 17, 0, 0)); // 30 January 2026, 00:00 WIB (UTC+7)
     try {
         const user = await User.findById(req.user.userId).populate("diterimaDi");
         if(!user) {
@@ -440,7 +440,7 @@ export const getUserDiterimaDimana = async (req: IGetRequestWithUser, res: Respo
         }
         // Allow admin to access anytime
         if((currentDate < releaseDate) && !user.isAdmin) {
-            res.status(403).json({message: "Forbidden: Access Denied"});
+            res.status(403).json({message: "Forbidden: Pengumuman belum dibuka"});
             return;
         }
         const diterimaDi = user.diterimaDi;
