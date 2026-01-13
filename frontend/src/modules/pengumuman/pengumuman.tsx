@@ -8,7 +8,7 @@ const Pengumuman = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const { diterimaDi } = await getPenerimaanUser(accessToken as string);
   // Set your announcement release date here
-  const releaseDate = new Date("2025-12-22T03:00:00Z"); // 22 December 2025, 10:00 WIB (UTC+7)
+  const releaseDate = new Date(Date.UTC(2026, 0, 29, 17, 0, 0)); // 30 January 2026, 00:00 WIB (UTC+7)
   const currentDate = new Date();
   console.log(`pengumuman.tsx: releaseDate: ${releaseDate}`);
 
