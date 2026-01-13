@@ -4,9 +4,9 @@ import Divisi from "../models/divisiModels";
 import { Response } from "express";
 import { IGetRequestWithUser } from "../types/getUserRequest";
 
-// Pengumpulan penugasan dibuka: 14 Januari 2026, 00:00 WIB (midnight)
+// Pengumpulan penugasan dibuka: 12 Januari 2026, 00:00 WIB (untuk testing - already open)
 // Pengumpulan penugasan ditutup: 22 Januari 2026, 00:00 WIB (midnight)
-const SUBMISSION_OPEN_DATE = new Date(Date.UTC(2026, 0, 13, 17, 0, 0)); // 14 Jan 2026, 00:00 WIB (UTC+7)
+const SUBMISSION_OPEN_DATE = new Date(Date.UTC(2026, 0, 11, 17, 0, 0)); // 12 Jan 2026, 00:00 WIB (UTC+7)
 const SUBMISSION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 21, 17, 0, 0)); // 22 Jan 2026, 00:00 WIB (UTC+7)
 
 const checkSubmissionPeriod = (): { isOpen: boolean; message?: string } => {

@@ -9,7 +9,7 @@ interface DIVISISLOT {
   [key: string]: IDivisiSlot;
 }
 
-// Deadline pemilihan jadwal wawancara: 22 Januari 2026, 00:00 WIB (midnight)
+// Deadline pemilihan jadwal wawancara: 22 Januari 2026, 00:00 WIB (untuk testing - dibuka sejak 12 Jan)
 const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2026, 0, 21, 17, 0, 0)); // 22 Jan 2026, 00:00 WIB (UTC+7)
 
 async function handleWawancaraSelection(
