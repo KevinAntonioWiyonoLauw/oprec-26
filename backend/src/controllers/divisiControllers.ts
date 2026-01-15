@@ -10,10 +10,10 @@ import mongoose from "mongoose";
 //
 const MAX_DIVISIONS_PER_TYPE = 2;
 
-// Pemilihan divisi dibuka: 12 Januari 2026, 00:00 WIB (untuk testing - already open)
-// Pemilihan divisi ditutup: 22 Januari 2026, 00:00 WIB (midnight)
-const DIVISION_SELECTION_OPEN_DATE = new Date(Date.UTC(2026, 0, 11, 17, 0, 0)); // 12 Jan 2026, 00:00 WIB (UTC+7)
-const DIVISION_SELECTION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 21, 17, 0, 0)); // 22 Jan 2026, 00:00 WIB (UTC+7)
+// Pemilihan divisi dibuka: 16 Januari 2026, 00:00 WIB
+// Pemilihan divisi ditutup: 24 Januari 2026, 00:00 WIB (midnight)
+const DIVISION_SELECTION_OPEN_DATE = new Date(Date.UTC(2026, 0, 15, 17, 0, 0)); // 16 Jan 2026, 00:00 WIB (UTC+7)
+const DIVISION_SELECTION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 23, 17, 0, 0)); // 24 Jan 2026, 00:00 WIB (UTC+7)
 
 class DivisionSelectionError extends Error {
     constructor(message: string, public statusCode: number = 400) {
