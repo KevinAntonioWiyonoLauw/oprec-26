@@ -9,7 +9,6 @@ interface DIVISISLOT {
   [key: string]: IDivisiSlot;
 }
 
-// Deadline pemilihan jadwal wawancara: 22 Januari 2026, 00:00 WIB (untuk testing - dibuka sejak 12 Jan)
 const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2026, 0, 21, 17, 0, 0)); // 22 Jan 2026, 00:00 WIB (UTC+7)
 
 async function handleWawancaraSelection(
@@ -238,8 +237,8 @@ export const getAllWawancara = async (
 ): Promise<void> => {
   try {
     const [wawancaraHimakom, wawancaraOti] = await Promise.all([
-      Wawancara.find({ himakom: true }), 
-      Wawancara.find({ himakom: false }),
+      Wawancara.find({ himakom: true }).sort({ tanggal: 1 }), // Sort by date ascending (oldest first)
+      Wawancara.find({ himakom: false }).sort({ tanggal: 1 }),
     ]);
     
     res.status(200).json({ wawancaraHimakom, wawancaraOti });
