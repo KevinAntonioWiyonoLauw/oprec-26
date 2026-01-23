@@ -5,6 +5,7 @@ import Wawancara from "./components/Wawancara";
 import {
   getAllDivisi,
   getEnrolledDivisi,
+  getPilihanWawancara,
 } from "@/utils/fetch";
 import { cookies } from "next/headers";
 
@@ -12,6 +13,7 @@ const Divisi = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const divisi = await getAllDivisi(accessToken as string);
   const pilihanDivisi  = await getEnrolledDivisi(accessToken as string);
+  const { filteredHima, filteredOti } = await getPilihanWawancara(accessToken as string);
 
   return (
     <>
@@ -25,7 +27,7 @@ const Divisi = async () => {
         <DivisiLengkap variant="himakom" divisi={divisi.himakomDivisi} />
       </div>
 
-      <Wawancara />
+      <Wawancara filteredHima={filteredHima} filteredOti={filteredOti} />
     </>
   );
 };
