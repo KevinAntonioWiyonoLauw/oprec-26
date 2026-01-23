@@ -9,7 +9,7 @@ interface DIVISISLOT {
   [key: string]: IDivisiSlot;
 }
 
-const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2026, 0, 22, 17, 0, 0)); // 22 Jan 2026, 00:00 WIB (UTC+7)
+const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2026, 0, 23, 17, 0, 0)); // 23 Jan 2026, 00:00 WIB (UTC+7)
 
 async function handleWawancaraSelection(
   req: IGetRequestWithUser,
