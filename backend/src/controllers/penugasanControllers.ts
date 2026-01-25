@@ -4,47 +4,48 @@ import Divisi from "../models/divisiModels";
 import { Response } from "express";
 import { IGetRequestWithUser } from "../types/getUserRequest";
 
+// DEADLINE DISABLED - Assignment submission always open
 // Pengumpulan penugasan dibuka: 16 Januari 2026, 00:00 WIB
 // Pengumpulan penugasan ditutup: 24 Januari 2026, 00:00 WIB (midnight)
-const SUBMISSION_OPEN_DATE = new Date(Date.UTC(2026, 0, 15, 17, 0, 0)); // 16 Jan 2026, 00:00 WIB (UTC+7)
-const SUBMISSION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 23, 17, 0, 0)); // 24 Jan 2026, 00:00 WIB (UTC+7)
+// const SUBMISSION_OPEN_DATE = new Date(Date.UTC(2026, 0, 15, 17, 0, 0)); // 16 Jan 2026, 00:00 WIB (UTC+7)
+// const SUBMISSION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 23, 17, 0, 0)); // 24 Jan 2026, 00:00 WIB (UTC+7)
 
-const checkSubmissionPeriod = (): { isOpen: boolean; message?: string } => {
-    const now = new Date();
-    
-    if (now < SUBMISSION_OPEN_DATE) {
-        return {
-            isOpen: false,
-            message: `Pengumpulan penugasan belum dibuka. Akan dibuka pada ${SUBMISSION_OPEN_DATE.toLocaleString('id-ID', { 
-                dateStyle: 'long', 
-                timeStyle: 'short',
-                timeZone: 'Asia/Jakarta'
-            })}`
-        };
-    }
-    
-    if (now > SUBMISSION_CLOSE_DATE) {
-        return {
-            isOpen: false,
-            message: `Pengumpulan penugasan sudah ditutup pada ${SUBMISSION_CLOSE_DATE.toLocaleString('id-ID', { 
-                dateStyle: 'long', 
-                timeStyle: 'short',
-                timeZone: 'Asia/Jakarta'
-            })}`
-        };
-    }
-    
-    return { isOpen: true };
-};
+// const checkSubmissionPeriod = (): { isOpen: boolean; message?: string } => {
+//     const now = new Date();
+//     
+//     if (now < SUBMISSION_OPEN_DATE) {
+//         return {
+//             isOpen: false,
+//             message: `Pengumpulan penugasan belum dibuka. Akan dibuka pada ${SUBMISSION_OPEN_DATE.toLocaleString('id-ID', { 
+//                 dateStyle: 'long', 
+//                 timeStyle: 'short',
+//                 timeZone: 'Asia/Jakarta'
+//             })}`
+//         };
+//     }
+//     
+//     if (now > SUBMISSION_CLOSE_DATE) {
+//         return {
+//             isOpen: false,
+//             message: `Pengumpulan penugasan sudah ditutup pada ${SUBMISSION_CLOSE_DATE.toLocaleString('id-ID', { 
+//                 dateStyle: 'long', 
+//                 timeStyle: 'short',
+//                 timeZone: 'Asia/Jakarta'
+//             })}`
+//         };
+//     }
+//     
+//     return { isOpen: true };
+// };
 
 export const submitPenugasan = async(req: IGetRequestWithUser, res: Response): Promise<void> => {
     try {
-        // Check if submission period is open
-        const submissionCheck = checkSubmissionPeriod();
-        if (!submissionCheck.isOpen) {
-            res.status(403).json({ message: submissionCheck.message });
-            return;
-        }
+        // Check if submission period is open - DISABLED
+        // const submissionCheck = checkSubmissionPeriod();
+        // if (!submissionCheck.isOpen) {
+        //     res.status(403).json({ message: submissionCheck.message });
+        //     return;
+        // }
 
         const { slug: divisiSlug } = req.params;
         const { link, comment } = req.body;
@@ -86,12 +87,12 @@ export const submitPenugasan = async(req: IGetRequestWithUser, res: Response): P
 
 export const updateTugas = async(req: IGetRequestWithUser, res: Response): Promise<void> => {
     try{
-        // Check if submission period is open
-        const submissionCheck = checkSubmissionPeriod();
-        if (!submissionCheck.isOpen) {
-            res.status(403).json({ message: submissionCheck.message });
-            return;
-        }
+        // Check if submission period is open - DISABLED
+        // const submissionCheck = checkSubmissionPeriod();
+        // if (!submissionCheck.isOpen) {
+        //     res.status(403).json({ message: submissionCheck.message });
+        //     return;
+        // }
 
         if(!req.user){
             res.status(401).json({message: "Unauthorized"});
@@ -145,13 +146,14 @@ export const existingSubmission = async(req: IGetRequestWithUser, res: Response)
 export const checkSubmissionStatus = async(_req: IGetRequestWithUser, res: Response): Promise<void> => {
     try {
         const now = new Date();
-        const submissionCheck = checkSubmissionPeriod();
+        // DEADLINE DISABLED - Always report as open
+        // const submissionCheck = checkSubmissionPeriod();
         
         res.status(200).json({
-            isOpen: submissionCheck.isOpen,
-            message: submissionCheck.message || "Pengumpulan penugasan sedang dibuka",
-            openDate: SUBMISSION_OPEN_DATE,
-            closeDate: SUBMISSION_CLOSE_DATE,
+            isOpen: true,
+            message: "Pengumpulan penugasan sedang dibuka (no time limit)",
+            openDate: null,
+            closeDate: null,
             currentTime: now
         });
         return;
