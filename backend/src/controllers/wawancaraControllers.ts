@@ -9,25 +9,27 @@ interface DIVISISLOT {
   [key: string]: IDivisiSlot;
 }
 
-const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2026, 0, 29, 16, 59, 0)); // 29 Jan 2026, 23:59 WIB (UTC+7)
+// DEADLINE DISABLED - No time limit for wawancara selection
+// const WAWANCARA_SELECTION_DEADLINE = new Date(Date.UTC(2026, 0, 29, 16, 59, 0)); // 29 Jan 2026, 23:59 WIB (UTC+7)
+
 async function handleWawancaraSelection(
   req: IGetRequestWithUser,
   res: Response,
   isHimakom: boolean
 ): Promise<void> {
   try {
-    // Check if selection period has closed
-    const now = new Date();
-    if (now > WAWANCARA_SELECTION_DEADLINE) {
-      res.status(403).json({ 
-        message: `Pemilihan jadwal wawancara sudah ditutup pada ${WAWANCARA_SELECTION_DEADLINE.toLocaleString('id-ID', { 
-          dateStyle: 'long', 
-          timeStyle: 'short',
-          timeZone: 'Asia/Jakarta'
-        })}`
-      });
-      return;
-    }
+    // Check if selection period has closed - DISABLED
+    // const now = new Date();
+    // if (now > WAWANCARA_SELECTION_DEADLINE) {
+    //   res.status(403).json({ 
+    //     message: `Pemilihan jadwal wawancara sudah ditutup pada ${WAWANCARA_SELECTION_DEADLINE.toLocaleString('id-ID', { 
+    //       dateStyle: 'long', 
+    //       timeStyle: 'short',
+    //       timeZone: 'Asia/Jakarta'
+    //     })}`
+    //   });
+    //   return;
+    // }
 
     if (!req.user) {
       res.status(401).json({ message: "Unauthorized" });

@@ -10,10 +10,11 @@ import mongoose from "mongoose";
 //
 const MAX_DIVISIONS_PER_TYPE = 2;
 
+// DEADLINE DISABLED - Division selection always open
 // Pemilihan divisi dibuka: 16 Januari 2026, 00:00 WIB
 // Pemilihan divisi ditutup: 24 Januari 2026, 00:00 WIB (midnight)
-const DIVISION_SELECTION_OPEN_DATE = new Date(Date.UTC(2026, 0, 15, 17, 0, 0)); // 16 Jan 2026, 00:00 WIB (UTC+7)
-const DIVISION_SELECTION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 23, 17, 0, 0)); // 24 Jan 2026, 00:00 WIB (UTC+7)
+// const DIVISION_SELECTION_OPEN_DATE = new Date(Date.UTC(2026, 0, 15, 17, 0, 0)); // 16 Jan 2026, 00:00 WIB (UTC+7)
+// const DIVISION_SELECTION_CLOSE_DATE = new Date(Date.UTC(2026, 0, 23, 17, 0, 0)); // 24 Jan 2026, 00:00 WIB (UTC+7)
 
 class DivisionSelectionError extends Error {
     constructor(message: string, public statusCode: number = 400) {
@@ -23,29 +24,29 @@ class DivisionSelectionError extends Error {
 
 export const pilihDivisi = async (req: IGetRequestWithUser, res: Response): Promise<void> => {
     try {
-        // Check if selection period is open
-        const now = new Date();
-        if (now < DIVISION_SELECTION_OPEN_DATE) {
-            res.status(403).json({ 
-                message: `Pemilihan divisi belum dibuka. Akan dibuka pada ${DIVISION_SELECTION_OPEN_DATE.toLocaleString('id-ID', { 
-                    dateStyle: 'long', 
-                    timeStyle: 'short',
-                    timeZone: 'Asia/Jakarta'
-                })}`
-            });
-            return;
-        }
-        
-        if (now > DIVISION_SELECTION_CLOSE_DATE) {
-            res.status(403).json({ 
-                message: `Pemilihan divisi sudah ditutup pada ${DIVISION_SELECTION_CLOSE_DATE.toLocaleString('id-ID', { 
-                    dateStyle: 'long', 
-                    timeStyle: 'short',
-                    timeZone: 'Asia/Jakarta'
-                })}`
-            });
-            return;
-        }
+        // Check if selection period is open - DISABLED
+        // const now = new Date();
+        // if (now < DIVISION_SELECTION_OPEN_DATE) {
+        //     res.status(403).json({ 
+        //         message: `Pemilihan divisi belum dibuka. Akan dibuka pada ${DIVISION_SELECTION_OPEN_DATE.toLocaleString('id-ID', { 
+        //             dateStyle: 'long', 
+        //             timeStyle: 'short',
+        //             timeZone: 'Asia/Jakarta'
+        //         })}`
+        //     });
+        //     return;
+        // }
+        // 
+        // if (now > DIVISION_SELECTION_CLOSE_DATE) {
+        //     res.status(403).json({ 
+        //         message: `Pemilihan divisi sudah ditutup pada ${DIVISION_SELECTION_CLOSE_DATE.toLocaleString('id-ID', { 
+        //             dateStyle: 'long', 
+        //             timeStyle: 'short',
+        //             timeZone: 'Asia/Jakarta'
+        //         })}`
+        //     });
+        //     return;
+        // }
 
         const { slug: divisiSlug } = req.params;
         const { urutanPrioritas } = req.body;
