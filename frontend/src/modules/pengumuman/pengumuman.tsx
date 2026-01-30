@@ -7,20 +7,15 @@ import { formatDate } from "@/lib/utils";
 const Pengumuman = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const { diterimaDi } = await getPenerimaanUser(accessToken as string);
-  // Set your announcement release date here - 30 January 2026, 12:00 WIB (noon)
-  const releaseDate = new Date("2026-01-30T12:00:00+07:00"); // 30 January 2026, 12:00 WIB
-  const currentDate = new Date();
-  console.log(`pengumuman.tsx: releaseDate: ${releaseDate}`);
-
-  const isAnnouncementAvailable = currentDate >= releaseDate;
-  // const isAnnouncementAvailable = true;
+  
+  // COMING SOON MODE - Set to false to show coming soon
+  // Change to true when announcement is ready to be opened
+  const isAnnouncementAvailable = false;
+  // const isAnnouncementAvailable = true; // Uncomment this line to open announcement
 
   return (
     <main className="space-y-8">
-      <Title
-        isAnnouncementAvailable={isAnnouncementAvailable}
-        releaseDate={releaseDate}
-      />
+      <Title isAnnouncementAvailable={isAnnouncementAvailable} />
 
       <div className="flex h-96 flex-col items-center justify-center gap-4 rounded-xl bg-custom-gray-dark p-6">
         <Smile size={100} />
@@ -33,12 +28,8 @@ const Pengumuman = async () => {
           </>
         ) : (
           <h1 className="text-center text-xl font-medium">
-            Pengumuman belum tersedia. Silakan cek kembali pada tanggal{" "}
-            {releaseDate.toLocaleDateString("id-ID", { 
-              day: "numeric", 
-              month: "long", 
-              year: "numeric" 
-            })}.
+            Pengumuman akan segera dibuka. <br />
+            Mohon ditunggu ya! 🎉
           </h1>
         )}
       </div>
@@ -47,12 +38,10 @@ const Pengumuman = async () => {
 };
 
 // title
-const Title = async ({
+const Title = ({
   isAnnouncementAvailable,
-  releaseDate,
 }: {
   isAnnouncementAvailable: boolean;
-  releaseDate: Date;
 }) => (
   <>
     {isAnnouncementAvailable ? (
@@ -67,14 +56,8 @@ const Title = async ({
       <section>
         <h1 className="text-2xl font-semibold sm:text-4xl">Pengumuman</h1>
         <p>
-          Kamu dapat membuka hasil pengumuman pada{" "}
-          <span className="font-semibold">
-            {releaseDate.toLocaleDateString("id-ID", { 
-              day: "numeric", 
-              month: "long", 
-              year: "numeric" 
-            })}
-          </span>
+          Hasil pengumuman{" "}
+          <span className="font-semibold">Open recruitment</span> akan segera dibuka
         </p>
       </section>
     )}
