@@ -8,14 +8,20 @@ const Pengumuman = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const { diterimaDi } = await getPenerimaanUser(accessToken as string);
   
-  // COMING SOON MODE - Set to false to show coming soon
-  // Change to true when announcement is ready to be opened
-  const isAnnouncementAvailable = false;
-  // const isAnnouncementAvailable = true; // Uncomment this line to open announcement
+  // Set your announcement release date here - 1 February 2026, 07:00 WIB
+  const releaseDate = new Date("2026-02-01T07:00:00+07:00"); // 1 February 2026, 07:00 WIB
+  const currentDate = new Date();
+  console.log(`pengumuman.tsx: releaseDate: ${releaseDate}, currentDate: ${currentDate}`);
+
+  const isAnnouncementAvailable = currentDate >= releaseDate;
+  // const isAnnouncementAvailable = true; // Uncomment to always show
 
   return (
     <main className="space-y-8">
-      <Title isAnnouncementAvailable={isAnnouncementAvailable} />
+      <Title
+        isAnnouncementAvailable={isAnnouncementAvailable}
+        releaseDate={releaseDate}
+      />
 
       <div className="flex h-96 flex-col items-center justify-center gap-4 rounded-xl bg-custom-gray-dark p-6">
         <Smile size={100} />
@@ -40,8 +46,10 @@ const Pengumuman = async () => {
 // title
 const Title = ({
   isAnnouncementAvailable,
+  releaseDate,
 }: {
   isAnnouncementAvailable: boolean;
+  releaseDate: Date;
 }) => (
   <>
     {isAnnouncementAvailable ? (
@@ -57,7 +65,17 @@ const Title = ({
         <h1 className="text-2xl font-semibold sm:text-4xl">Pengumuman</h1>
         <p>
           Hasil pengumuman{" "}
-          <span className="font-semibold">Open recruitment</span> akan segera dibuka
+          <span className="font-semibold">Open recruitment</span> akan dibuka pada{" "}
+          <span className="font-semibold">
+            {releaseDate.toLocaleDateString("id-ID", { 
+              day: "numeric", 
+              month: "long", 
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "Asia/Jakarta"
+            })}
+          </span>
         </p>
       </section>
     )}
